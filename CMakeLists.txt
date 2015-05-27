@@ -85,6 +85,9 @@ target_link_libraries ( ${PROJECT_NAME} cfg)
 message(STATUS "linking logging library")
 target_link_libraries ( ${PROJECT_NAME} logging)
 
+message(STATUS "linking messaging library")
+target_link_libraries ( ${PROJECT_NAME} messaging)
+
 message(STATUS "------------------------------")
 message(STATUS "linking external libraries")
 
