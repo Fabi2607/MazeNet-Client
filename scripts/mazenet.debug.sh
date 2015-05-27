@@ -17,4 +17,4 @@ cd Debug
 cmake -DCMAKE_BUILD_TYPE=Debug $MAZENET #2
 cd ..
 
-$MAZENET/scripts/swe.md.sh #3
+$MAZENET/scripts/mazenet.md.sh #3

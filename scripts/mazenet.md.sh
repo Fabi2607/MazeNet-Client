@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ -d "$SWE/Debug" ]
+if [ -d "$MAZENET/Debug" ]
 then
 
 cores=$(($(nproc)/2))
