@@ -23,7 +23,12 @@ TcpMessage::TcpMessage(const std::string& message) : data_() {
 #ifdef TWO_BYTE_TCP_LENGTH
   header_len_t body_len_net_order = htons(body_len_host_order_);
 #else
-  header_len_t body_len_net_order = htonl(body_len_host_order_);
+  header_len_t body_len_net_order =
+   #ifdef LITTLE_ENDIAN_TCP_LENGTH
+      body_len_host_order_; // only guarenteed to work on x86_64 Linux
+   #else
+      htonl(body_len_host_order_);
+   #endif
 #endif
 
   // copy data
@@ -80,7 +85,11 @@ bool TcpMessage::setBodyLengthNO(header_len_t len_in_network_order_) {
 #ifdef TWO_BYTE_TCP_LENGTH
   body_len_host_order_ = ntohs(len_in_network_order_);
 #else
-  body_len_host_order_ = ntohl(len_in_network_order_);
+  #ifdef LITTLE_ENDIAN_TCP_LENGTH
+    body_len_host_order_ = len_in_network_order_;
+  #else
+    body_len_host_order_ = ntohl(len_in_network_order_);
+  #endif
 #endif
 
   if (body_len_host_order_ > max_body_len_) {
