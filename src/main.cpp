@@ -9,18 +9,25 @@
 
 #include "network/TcpClient.hpp"
 #include "util/cfg/CfgManager.hpp"
+#include "util/logging/Log.hpp"
 #include "messaging/mazeCom.hxx"
 
 int main(int argc, char *argv[]) {
   using namespace mazenet::util::cfg;
-
+  using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
 
+  // keep as first line
   if (cfgMan.parseCmdLineOptions(argc, argv) == ExecutionMode::RUN) {
+    Log logger("main");
+
     TcpClient client;
     auto con = client.getConnection();
+    auto host = cfgMan.get<std::string>("server.host");
+    auto port = cfgMan.get<std::string>("server.port");
 
-    client.openConnection(cfgMan.get<std::string>("server.host"), cfgMan.get<std::string>("server.port"));
+    logger.log() << "Connecting to: " << host << ":" << port << logger.end();
+    client.openConnection(host, port);
 
     MazeCom login_message(MazeComType(MazeComType::LOGIN), 1);
 
