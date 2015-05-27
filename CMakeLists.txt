@@ -110,4 +110,7 @@ target_link_libraries( ${PROJECT_NAME} ${XercesLibrary})
 
 message(STATUS "------------------------------")
 
+file(COPY config.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY src/messaging/schema/mazeCom.xsd DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 message(STATUS "DONE!")

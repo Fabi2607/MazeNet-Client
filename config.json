@@ -1,0 +1,20 @@
+{
+    "server":
+    {
+        "host": "127.0.0.1",
+        "port": "5123",
+        "timeout": "60",
+        "retry": "5"
+    },
+    "player":
+    {
+        "name": "DarkDev"
+    },
+    "log":
+    {
+        "main": "true",
+        "network": "false",
+        "verbose": "false",
+        "level": "0"
+    }
+}

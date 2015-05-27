@@ -12,21 +12,27 @@
 #include "messaging/mazeCom.hxx"
 
 int main(int argc, char *argv[]) {
-  TcpClient client;
-  auto con = client.getConnection();
+  using namespace mazenet::util::cfg;
 
-  client.openConnection("127.0.0.1","5123");
+  CfgManager& cfgMan = CfgManager::instance();
 
-  MazeCom login_message(MazeComType(MazeComType::LOGIN), 1);
+  if (cfgMan.parseCmdLineOptions(argc, argv) == ExecutionMode::RUN) {
+    TcpClient client;
+    auto con = client.getConnection();
 
-  login_message.LoginMessage(LoginMessageType("Klaus"));
+    client.openConnection(cfgMan.get<std::string>("server.host"), cfgMan.get<std::string>("server.port"));
 
-  std::stringstream ss;
-  MazeCom_(ss,login_message);
+    MazeCom login_message(MazeComType(MazeComType::LOGIN), 1);
 
-  client.getConnection()->send(ss.str());
+    login_message.LoginMessage(LoginMessageType(cfgMan.get<std::string>("player.name")));
 
-  client.getIOService().run();
+    std::stringstream ss;
+    MazeCom_(ss, login_message);
+
+    client.getConnection()->send(ss.str());
+
+    client.getIOService().run();
+  }
 
   return 0;
 }

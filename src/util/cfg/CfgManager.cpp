@@ -99,7 +99,7 @@ void CfgManager::createDefault() {
 
   // server category
   configuration_.set<std::string>("server.host"   , "127.0.0.1");
-  configuration_.set<std::string>("server.port"   ,     "30400");
+  configuration_.set<std::string>("server.port"   ,     "5123");
   configuration_.set<int>        ("server.timeout",          60);
   configuration_.set<unsigned>   ("server.retry"  ,           5);
 

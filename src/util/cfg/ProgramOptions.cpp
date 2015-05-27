@@ -21,6 +21,7 @@ void ProgramOptions::init_options(int argc, char* argv[]) {
   general.add_options()
              ("host,h", po::value<std::string>(), "specify hostname")
              ("port,p", po::value<std::string>(), "specify port")
+             ("name,n", po::value<std::string>(), "specify username")
              ("timeout,t", po::value<int>(), "server timeout in seconds")
              ("version,v", "display program version")
              ("help", "display help message");
@@ -31,17 +32,10 @@ void ProgramOptions::init_options(int argc, char* argv[]) {
            ("verbose", "display verbose console output")
            ("loglevel", po::value<unsigned>(), "minimum level required for log triggering \n 0[info] - 5[critical]")
            ("default-settings", "restore default configuration")
-           ("dump-overrides", "dumps all overrides")
-           ("interactive,i", "activates the interactive mode");
+           ("dump-overrides", "dumps all overrides");
 
-  po::options_description internal("Internal");
-  internal.add_options()
-              ("child", po::value<unsigned>(), "execute as child process with id")
-              ("workflows", po::value<std::vector<std::string>>()->multitoken(), "workflow assigned to this process")
-              ("logdir", po::value<std::string>(), "base directory for logging")
-              ("uuid", po::value<std::string>(), "UUID if this context");
 
-  cmdline_options_.add(general).add(debug).add(internal);
+  cmdline_options_.add(general).add(debug);
 
   try {
     po::store(po::command_line_parser(argc, argv).options(cmdline_options_).run(), vm_);
@@ -61,7 +55,7 @@ ExecutionMode ProgramOptions::execute() {
     return ExecutionMode::EXIT;
   }
 
-  return ExecutionMode::NONE;
+  return ExecutionMode::RUN;
 }
 
 }

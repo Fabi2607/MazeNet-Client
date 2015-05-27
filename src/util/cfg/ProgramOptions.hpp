@@ -25,10 +25,7 @@ namespace cfg {
 enum class ExecutionMode {
   NONE,
   EXIT,
-  INTERACTIVE,
-  SEQUENTIAL,
-  PARALLEL_MASTER,
-  PARALLEL_CHILD,
+  RUN
 };
 
 /**
@@ -58,7 +55,7 @@ class ProgramOptions {
   * prints the version info
   */
   inline void print_version(void) {
-    std::cout << "GroundStar Realtime User Simulator" << std::endl;
+    std::cout << "DarkDev MazeNet Client" << std::endl;
     std::cout << "Version: " << PROJECT_MAJOR_VERSION << "." << PROJECT_MINOR_VERSION << std::endl;
     std::cout << "Revision: " << REVISION_NUMBER << std::endl;
     std::cout << "Compiled using: " << COMPILER_VERSION << std::endl;
