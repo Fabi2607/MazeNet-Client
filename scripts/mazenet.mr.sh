@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ -d "$SWE/Release" ]
+if [ -d "$MAZENET/Release" ]
 then
 
 cores=$(($(nproc)/2))
