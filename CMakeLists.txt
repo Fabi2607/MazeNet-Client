@@ -88,6 +88,9 @@ target_link_libraries ( ${PROJECT_NAME} logging)
 message(STATUS "linking messaging library")
 target_link_libraries ( ${PROJECT_NAME} messaging)
 
+message(STATUS "linking network library")
+target_link_libraries ( ${PROJECT_NAME} network)
+
 message(STATUS "------------------------------")
 message(STATUS "linking external libraries")
 

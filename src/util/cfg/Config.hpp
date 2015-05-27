@@ -13,6 +13,6 @@
 constexpr const char* const COMPILER_VERSION = "c++ (Debian 4.9.2-18) 4.9.2";
 constexpr const char* const PROJECT_MAJOR_VERSION = "0";
 constexpr const char* const PROJECT_MINOR_VERSION = "1";
-constexpr const char* const REVISION_NUMBER = "2";
+constexpr const char* const REVISION_NUMBER = "6";
 
 #endif // CONFIG_HPP_IN
