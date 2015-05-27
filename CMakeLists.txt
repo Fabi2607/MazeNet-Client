@@ -17,6 +17,7 @@ set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
 
 add_definitions(-DBOOST_LOG_DYN_LINK)
+add_definitions(-DLITTLE_ENDIAN_TCP_LENGTH)
 
 # set custom modul path
 set(CMAKE_MODULE_PATH "${MazeNet-Client_SOURCE_DIR}/scripts/cmake/")
@@ -62,6 +63,11 @@ include_directories( ${Boost_INCLUDE_DIR} )
 # find ICU for boost unicode support
 find_package(ICU REQUIRED)
 
+find_library(XercesLibrary NAMES xerces-c PATHS /usr/lib/x86_64-linux-gnu/)
+if(NOT XercesLibrary)
+  message(FATAL_ERROR "Failed to find the Xerces library.")
+endif()
+
 #add executable
 add_executable ( ${PROJECT_NAME} src/main.cpp )
 
@@ -99,6 +105,8 @@ target_link_libraries ( ${PROJECT_NAME} ${Boost_LIBRARIES})
 
 message(STATUS "linking ICU: " ${ICU_LIBRARIES})
 target_link_libraries ( ${PROJECT_NAME} ${ICU_LIBRARIES} )
+
+target_link_libraries( ${PROJECT_NAME} ${XercesLibrary})
 
 message(STATUS "------------------------------")
 
