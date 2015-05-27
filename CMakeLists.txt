@@ -81,6 +81,7 @@ include_directories ( src )
 message(STATUS "------------------------------")
 message(STATUS "linking internal libraries")
 
+target_link_libraries ( ${PROJECT_NAME} player)
 
 message(STATUS "linking util library")
 target_link_libraries ( ${PROJECT_NAME} util)
