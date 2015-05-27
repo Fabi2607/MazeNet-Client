@@ -1,2 +1,4 @@
 bin/
 src/util/cfg/Config.hpp
+Debug/
+Release/

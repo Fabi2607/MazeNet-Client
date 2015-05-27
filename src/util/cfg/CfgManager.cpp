@@ -63,25 +63,8 @@ void CfgManager::translateCmdOpts() {
     overrides_.set("server.port", cmdOpts_.vm_["port"].as<std::string>());
   }
 
-  if (cmdOpts_.vm_.count("workflows")) {
-    overrides_.set_collection<std::vector<std::string>>("simulation.workflows", cmdOpts_.vm_["workflows"].as<std::vector<std::string>>() );
-  }
-
-  if (cmdOpts_.vm_.count("interactive")) {
-    overrides_.set("simulation.mode", "interactive");
-  }
-
-  if (cmdOpts_.vm_.count("uuid")) {
-    overrides_.set("simulation.uuid", cmdOpts_.vm_["uuid"].as<std::string>());
-  }
-
-  // not available in config.json
-  if (cmdOpts_.vm_.count("child")) {
-    overrides_.set("simulation.child", cmdOpts_.vm_["child"].as<unsigned>());
-  }
-
-  if (cmdOpts_.vm_.count("logdir")) {
-    overrides_.set("log.directory", cmdOpts_.vm_["logdir"].as<std::string>());
+  if(cmdOpts_.vm_.count("name")) {
+    overrides_.set("player.name", cmdOpts_.vm_["name"].as<std::string>());
   }
 
   if (cmdOpts_.vm_.count("verbose")) {
@@ -105,21 +88,7 @@ void CfgManager::translateCmdOpts() {
 /****************************************************************/
 
 void CfgManager::getExecutionMode(ExecutionMode& mode) {
-  if (mode != ExecutionMode::EXIT) {
-    std::string sim_mode = get<std::string>("simulation.mode", "");
-    if (sim_mode == "interactive") {
-      mode = ExecutionMode::INTERACTIVE;
-    } else if (sim_mode == "sequential") {
-      mode = ExecutionMode::SEQUENTIAL;
-    } else if (sim_mode == "parallel") {
-      mode = ExecutionMode::PARALLEL_MASTER;
-    }
 
-    // this child might have been spawned in interactive parallel mode
-    if (get<unsigned>("simulation.child", 0)){
-      mode = ExecutionMode::PARALLEL_CHILD;
-    }
-  }
 }
 
 /****************************************************************/
@@ -134,21 +103,12 @@ void CfgManager::createDefault() {
   configuration_.set<int>        ("server.timeout",          60);
   configuration_.set<unsigned>   ("server.retry"  ,           5);
 
-  // simulation category
-  configuration_.set_collection<std::vector<std::string>>("simulation.workflows", std::vector<std::string>{"TestCase"});
-
-  configuration_.set<unsigned>   ("simulation.runtime_min",            1);
-  configuration_.set<unsigned>   ("simulation.delay_ms"   ,         1000);
-  configuration_.set<std::string>("simulation.mode"       , "sequential");
-  configuration_.set<unsigned>   ("simulation.runner"     ,            1);
+  // player category
+  configuration_.set<std::string>("player.name"   ,"DarkDev");
 
   // log category
   configuration_.set<bool>("log.main"            ,  true);
   configuration_.set<bool>("log.network"         , false);
-  configuration_.set<bool>("log.python"          , false);
-  configuration_.set<bool>("log.simulation"      ,  true);
-  configuration_.set<bool>("log.command_profiles",  true);
-  configuration_.set<bool>("log.command_traces"  ,  true);
   configuration_.set<bool>("log.verbose"         , false);
   configuration_.set<int> ("log.level"           ,     0);
 
