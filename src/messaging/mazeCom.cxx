@@ -906,6 +906,7 @@ AwaitMoveMessageType (const board_type& board,
 : ::xml_schema::type (),
   board_ (board, this),
   treasuresToGo_ (this),
+  foundTreasures_ (this),
   treasure_ (treasure, this)
 {
 }
@@ -916,6 +917,7 @@ AwaitMoveMessageType (::std::unique_ptr< board_type > board,
 : ::xml_schema::type (),
   board_ (std::move (board), this),
   treasuresToGo_ (this),
+  foundTreasures_ (this),
   treasure_ (treasure, this)
 {
 }
@@ -927,6 +929,7 @@ AwaitMoveMessageType (const AwaitMoveMessageType& x,
 : ::xml_schema::type (x, f, c),
   board_ (x.board_, f, this),
   treasuresToGo_ (x.treasuresToGo_, f, this),
+  foundTreasures_ (x.foundTreasures_, f, this),
   treasure_ (x.treasure_, f, this)
 {
 }
@@ -938,6 +941,7 @@ AwaitMoveMessageType (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   board_ (this),
   treasuresToGo_ (this),
+  foundTreasures_ (this),
   treasure_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
@@ -979,6 +983,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
         treasuresToGo_traits::create (i, f, this));
 
       this->treasuresToGo_.push_back (::std::move (r));
+      continue;
+    }
+
+    // foundTreasures
+    //
+    if (n.name () == "foundTreasures" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< foundTreasures_type > r (
+        foundTreasures_traits::create (i, f, this));
+
+      this->foundTreasures_.push_back (::std::move (r));
       continue;
     }
 
@@ -1029,6 +1044,7 @@ operator= (const AwaitMoveMessageType& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->board_ = x.board_;
     this->treasuresToGo_ = x.treasuresToGo_;
+    this->foundTreasures_ = x.foundTreasures_;
     this->treasure_ = x.treasure_;
   }
 
@@ -1554,10 +1570,10 @@ WinMessageType::
 
 DisconnectMessageType::
 DisconnectMessageType (const name_type& name,
-                       const erroCode_type& erroCode)
+                       const errorCode_type& errorCode)
 : ::xml_schema::type (),
   name_ (name, this),
-  erroCode_ (erroCode, this)
+  errorCode_ (errorCode, this)
 {
 }
 
@@ -1567,7 +1583,7 @@ DisconnectMessageType (const DisconnectMessageType& x,
                        ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   name_ (x.name_, f, this),
-  erroCode_ (x.erroCode_, f, this)
+  errorCode_ (x.errorCode_, f, this)
 {
 }
 
@@ -1577,7 +1593,7 @@ DisconnectMessageType (const ::xercesc::DOMElement& e,
                        ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   name_ (this),
-  erroCode_ (this)
+  errorCode_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1610,16 +1626,16 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // erroCode
+    // errorCode
     //
-    if (n.name () == "erroCode" && n.namespace_ ().empty ())
+    if (n.name () == "errorCode" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< erroCode_type > r (
-        erroCode_traits::create (i, f, this));
+      ::std::unique_ptr< errorCode_type > r (
+        errorCode_traits::create (i, f, this));
 
-      if (!erroCode_.present ())
+      if (!errorCode_.present ())
       {
-        this->erroCode_.set (::std::move (r));
+        this->errorCode_.set (::std::move (r));
         continue;
       }
     }
@@ -1634,10 +1650,10 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!erroCode_.present ())
+  if (!errorCode_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "erroCode",
+      "errorCode",
       "");
   }
 }
@@ -1656,7 +1672,7 @@ operator= (const DisconnectMessageType& x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
     this->name_ = x.name_;
-    this->erroCode_ = x.erroCode_;
+    this->errorCode_ = x.errorCode_;
   }
 
   return *this;
@@ -2998,6 +3014,20 @@ operator<< (::xercesc::DOMElement& e, const AwaitMoveMessageType& i)
     s << *b;
   }
 
+  // foundTreasures
+  //
+  for (AwaitMoveMessageType::foundTreasures_const_iterator
+       b (i.foundTreasures ().begin ()), n (i.foundTreasures ().end ());
+       b != n; ++b)
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "foundTreasures",
+        e));
+
+    s << *b;
+  }
+
   // treasure
   //
   {
@@ -3149,15 +3179,15 @@ operator<< (::xercesc::DOMElement& e, const DisconnectMessageType& i)
     s << i.name ();
   }
 
-  // erroCode
+  // errorCode
   //
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
-        "erroCode",
+        "errorCode",
         e));
 
-    s << i.erroCode ();
+    s << i.errorCode ();
   }
 }
 

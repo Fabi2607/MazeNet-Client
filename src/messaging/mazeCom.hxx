@@ -36,8 +36,8 @@
  * @brief Generated from mazeCom.xsd.
  */
 
-#ifndef MAZE_COM_HXX
-#define MAZE_COM_HXX
+#ifndef SCHEMA_MAZE_COM_HXX
+#define SCHEMA_MAZE_COM_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -2347,6 +2347,70 @@ class AwaitMoveMessageType: public ::xml_schema::type
   //@}
 
   /**
+   * @name foundTreasures
+   *
+   * @brief Accessor and modifier functions for the %foundTreasures
+   * sequence element.
+   */
+  //@{
+
+  /**
+   * @brief Element type.
+   */
+  typedef ::treasureType foundTreasures_type;
+
+  /**
+   * @brief Element sequence container type.
+   */
+  typedef ::xsd::cxx::tree::sequence< foundTreasures_type > foundTreasures_sequence;
+
+  /**
+   * @brief Element iterator type.
+   */
+  typedef foundTreasures_sequence::iterator foundTreasures_iterator;
+
+  /**
+   * @brief Element constant iterator type.
+   */
+  typedef foundTreasures_sequence::const_iterator foundTreasures_const_iterator;
+
+  /**
+   * @brief Element traits type.
+   */
+  typedef ::xsd::cxx::tree::traits< foundTreasures_type, char > foundTreasures_traits;
+
+  /**
+   * @brief Return a read-only (constant) reference to the element
+   * sequence.
+   *
+   * @return A constant reference to the sequence container.
+   */
+  const foundTreasures_sequence&
+  foundTreasures () const;
+
+  /**
+   * @brief Return a read-write reference to the element sequence.
+   *
+   * @return A reference to the sequence container.
+   */
+  foundTreasures_sequence&
+  foundTreasures ();
+
+  /**
+   * @brief Copy elements from a given sequence.
+   *
+   * @param s A sequence to copy elements from.
+   *
+   * For each element in @a s this function makes a copy and adds it 
+   * to the sequence. Note that this operation completely changes the 
+   * sequence and all old elements will be lost.
+   */
+  void
+  foundTreasures (const foundTreasures_sequence& s);
+
+  //@}
+
+  /**
    * @name treasure
    *
    * @brief Accessor and modifier functions for the %treasure
@@ -2499,6 +2563,7 @@ class AwaitMoveMessageType: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< board_type > board_;
   treasuresToGo_sequence treasuresToGo_;
+  foundTreasures_sequence foundTreasures_;
   ::xsd::cxx::tree::one< treasure_type > treasure_;
 
   //@endcond
@@ -3469,9 +3534,9 @@ class DisconnectMessageType: public ::xml_schema::type
   //@}
 
   /**
-   * @name erroCode
+   * @name errorCode
    *
-   * @brief Accessor and modifier functions for the %erroCode
+   * @brief Accessor and modifier functions for the %errorCode
    * required element.
    */
   //@{
@@ -3479,28 +3544,28 @@ class DisconnectMessageType: public ::xml_schema::type
   /**
    * @brief Element type.
    */
-  typedef ::ErrorType erroCode_type;
+  typedef ::ErrorType errorCode_type;
 
   /**
    * @brief Element traits type.
    */
-  typedef ::xsd::cxx::tree::traits< erroCode_type, char > erroCode_traits;
+  typedef ::xsd::cxx::tree::traits< errorCode_type, char > errorCode_traits;
 
   /**
    * @brief Return a read-only (constant) reference to the element.
    *
    * @return A constant reference to the element.
    */
-  const erroCode_type&
-  erroCode () const;
+  const errorCode_type&
+  errorCode () const;
 
   /**
    * @brief Return a read-write reference to the element.
    *
    * @return A reference to the element.
    */
-  erroCode_type&
-  erroCode ();
+  errorCode_type&
+  errorCode ();
 
   /**
    * @brief Set the element value.
@@ -3511,7 +3576,7 @@ class DisconnectMessageType: public ::xml_schema::type
    * the new value of the element.
    */
   void
-  erroCode (const erroCode_type& x);
+  errorCode (const errorCode_type& x);
 
   /**
    * @brief Set the element value without copying.
@@ -3522,7 +3587,7 @@ class DisconnectMessageType: public ::xml_schema::type
    * instead of making a copy.
    */
   void
-  erroCode (::std::unique_ptr< erroCode_type > p);
+  errorCode (::std::unique_ptr< errorCode_type > p);
 
   //@}
 
@@ -3536,7 +3601,7 @@ class DisconnectMessageType: public ::xml_schema::type
    * initializers for required elements and attributes.
    */
   DisconnectMessageType (const name_type&,
-                         const erroCode_type&);
+                         const errorCode_type&);
 
   /**
    * @brief Create an instance from a DOM element.
@@ -3609,7 +3674,7 @@ class DisconnectMessageType: public ::xml_schema::type
 
   protected:
   ::xsd::cxx::tree::one< name_type > name_;
-  ::xsd::cxx::tree::one< erroCode_type > erroCode_;
+  ::xsd::cxx::tree::one< errorCode_type > errorCode_;
 
   //@endcond
 };
@@ -5716,4 +5781,4 @@ operator<< (::xercesc::DOMElement&, const winner&);
 //
 // End epilogue.
 
-#endif // MAZE_COM_HXX
+#endif // SCHEMA_MAZE_COM_HXX

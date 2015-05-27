@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef MAZE_COM_IXX
-#define MAZE_COM_IXX
+#ifndef SCHEMA_MAZE_COM_IXX
+#define SCHEMA_MAZE_COM_IXX
 
 // Begin prologue.
 //
@@ -531,6 +531,27 @@ treasuresToGo (const treasuresToGo_sequence& s)
 }
 
 inline
+const AwaitMoveMessageType::foundTreasures_sequence& AwaitMoveMessageType::
+foundTreasures () const
+{
+  return this->foundTreasures_;
+}
+
+inline
+AwaitMoveMessageType::foundTreasures_sequence& AwaitMoveMessageType::
+foundTreasures ()
+{
+  return this->foundTreasures_;
+}
+
+inline
+void AwaitMoveMessageType::
+foundTreasures (const foundTreasures_sequence& s)
+{
+  this->foundTreasures_ = s;
+}
+
+inline
 const AwaitMoveMessageType::treasure_type& AwaitMoveMessageType::
 treasure () const
 {
@@ -838,31 +859,31 @@ name (::std::unique_ptr< name_type > x)
 }
 
 inline
-const DisconnectMessageType::erroCode_type& DisconnectMessageType::
-erroCode () const
+const DisconnectMessageType::errorCode_type& DisconnectMessageType::
+errorCode () const
 {
-  return this->erroCode_.get ();
+  return this->errorCode_.get ();
 }
 
 inline
-DisconnectMessageType::erroCode_type& DisconnectMessageType::
-erroCode ()
+DisconnectMessageType::errorCode_type& DisconnectMessageType::
+errorCode ()
 {
-  return this->erroCode_.get ();
-}
-
-inline
-void DisconnectMessageType::
-erroCode (const erroCode_type& x)
-{
-  this->erroCode_.set (x);
+  return this->errorCode_.get ();
 }
 
 inline
 void DisconnectMessageType::
-erroCode (::std::unique_ptr< erroCode_type > x)
+errorCode (const errorCode_type& x)
 {
-  this->erroCode_.set (std::move (x));
+  this->errorCode_.set (x);
+}
+
+inline
+void DisconnectMessageType::
+errorCode (::std::unique_ptr< errorCode_type > x)
+{
+  this->errorCode_.set (std::move (x));
 }
 
 
@@ -1367,4 +1388,4 @@ id (const id_type& x)
 //
 // End epilogue.
 
-#endif // MAZE_COM_IXX
+#endif // SCHEMA_MAZE_COM_IXX
