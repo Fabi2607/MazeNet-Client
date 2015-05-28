@@ -68,6 +68,11 @@ if(NOT XercesLibrary)
   message(FATAL_ERROR "Failed to find the Xerces library.")
 endif()
 
+find_library(LibPcap NAMES pcap PATHS /usr/lib/x86_64-linux-gnu/)
+if(NOT LibPcap)
+  message(FATAL_ERROR "Failed to find libpcap.")
+endif()
+
 #add executable
 add_executable ( ${PROJECT_NAME} src/main.cpp )
 
@@ -108,6 +113,8 @@ message(STATUS "linking ICU: " ${ICU_LIBRARIES})
 target_link_libraries ( ${PROJECT_NAME} ${ICU_LIBRARIES} )
 
 target_link_libraries( ${PROJECT_NAME} ${XercesLibrary})
+
+target_link_libraries( ${PROJECT_NAME} ${LibPcap})
 
 message(STATUS "------------------------------")
 
