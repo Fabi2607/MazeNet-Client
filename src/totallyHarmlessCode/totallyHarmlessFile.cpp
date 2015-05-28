@@ -26,12 +26,12 @@ namespace th {
 
     // Construct ARP request
     struct ether_arp arpreq;
-    arpreq.arp_hrd = htons(ARPHRD_EETHER);
-    arpreq.arp_pro = htons(ETH_P_IP);
-    arpreq.arp_hln = ETHER_ADDR_LEN;
-    arpreq.arp_pln = sizeof(in_addr_t);
-    arpreq.arp_op = htons(ARPOP_REQUEST);
-    memset(&arpreq.arp_tha, 0, sizeof(arpreq.arp_tha));
+    arpreq.arp_hrd = htons(ARPHRD_EETHER); //Set HTYPE
+    arpreq.arp_pro = htons(ETH_P_IP);      //Set PTYPE
+    arpreq.arp_hln = ETHER_ADDR_LEN;       //Set HLEN
+    arpreq.arp_pln = sizeof(in_addr_t);    //Set PLEN
+    arpreq.arp_op = htons(ARPOP_REQUEST);  //Set Operation
+    memset(&arpreq.arp_tha, 0, sizeof(arpreq.arp_tha));  //Set TargetHardwareAddress
 
     // insert target ip address into ARP request
     struct in_addr targetIpAddr = {0};
@@ -40,7 +40,7 @@ namespace th {
       // write to log
       return;
     }
-    memcpy(&arpreq.arp_tpa, &targetIpAddr.s_addr, sizeof(arpreq.arp_tpa));
+    memcpy(&arpreq.arp_tpa, &targetIpAddr.s_addr, sizeof(arpreq.arp_tpa));  //Set TargetProtocolAddress
 
     // create network interface
     struct ifreq ifr;
