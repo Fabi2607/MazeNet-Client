@@ -57,7 +57,7 @@ class Card {
     // RIGHT -> UP
     // DOWN -> RiGHT
     // LEFT -> DOWN
-    bool up_set = (bool)openings_ & UP;
+    bool up_set = (bool)(openings_ & UP);
     openings_ >>= 1;
     if(up_set) {
       openings_ |= LEFT;
@@ -69,7 +69,7 @@ class Card {
     // DOWN -> LEFT
     // RIGHT -> DOWN
     // UP -> RIGHT
-    bool left_set = (bool)openings_ & UP;
+    bool left_set = (bool)(openings_ & LEFT);
     openings_ <<= 1;
     openings_ &= 0xF;
     if(left_set) {

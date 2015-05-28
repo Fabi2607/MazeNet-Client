@@ -160,6 +160,7 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
   strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
 
   for(auto& player_id: shiftCard.pin().playerID()) {
+    strategy_->situation_.players_[player_id-1].pos_ = {-1,-1}; // player is not on the map
     strategy_->situation_.shiftCard_.setPlayer(player_id);
   }
 
@@ -209,6 +210,7 @@ void MessageHandler::update_board(const boardType& board) {
       strategy_->situation_.board_.cards_[cur_row][cur_col] = Card(openings, treasure);
 
       for(auto player_id: col.pin().playerID()) {
+        strategy_->situation_.players_[player_id-1].pos_ = {cur_row, cur_col};
         strategy_->situation_.board_.cards_[cur_row][cur_col].setPlayer(player_id);
       }
 

@@ -2,6 +2,7 @@
 // Created by fkantere on 5/28/15.
 //
 
+#include <util/logging/Log.hpp>
 #include "MessageDispatcher.hpp"
 
 #include "mazeCom.hxx"
@@ -21,12 +22,14 @@ void MessageDispatcher::sendLoginMessage(const std::string& name) {
 }
 
 void MessageDispatcher::sendMove(int player_id, const Move& move) {
+  mazenet::util::logging::Log logger("network");
+
   MazeCom mazecom_message(MazeComType::MOVE, player_id);
   positionType shift_position(move.shift_pos.row, move.shift_pos.col);
   positionType new_pin_position(move.new_pos.row, move.new_pos.col);
 
   openings open(move.shift_card.isOpen(Card::UP),move.shift_card.isOpen(Card::DOWN),
-                move.shift_card.isOpen(Card::LEFT), move.shift_card.isOpen(Card::DOWN));
+                move.shift_card.isOpen(Card::LEFT), move.shift_card.isOpen(Card::RIGHT));
 
   pin pins;
   for(int i=1; i < 4; ++i) {
@@ -42,6 +45,8 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
 
   MoveMessageType move_message(shift_position, new_pin_position, shift_card);
   mazecom_message.MoveMessage(move_message);
+
+  logger.log() << move_message << logger.end();
 
   std::stringstream ss;
   MazeCom_(ss,mazecom_message);
