@@ -103,6 +103,8 @@
 #include <xsd/cxx/tree/serialization/double.hxx>
 #include <xsd/cxx/tree/serialization/decimal.hxx>
 
+#include <xsd/cxx/tree/std-ostream-operators.hxx>
+
 /**
  * @brief C++ namespace for the %http://www.w3.org/2001/XMLSchema
  * schema namespace.
@@ -5265,6 +5267,74 @@ class winner: public ::xml_schema::string
 #ifndef XSD_DONT_INCLUDE_INLINE
 
 #endif // XSD_DONT_INCLUDE_INLINE
+
+#include <iosfwd>
+
+::std::ostream&
+operator<< (::std::ostream&, MazeComType::value);
+
+::std::ostream&
+operator<< (::std::ostream&, const MazeComType&);
+
+::std::ostream&
+operator<< (::std::ostream&, treasureType::value);
+
+::std::ostream&
+operator<< (::std::ostream&, const treasureType&);
+
+::std::ostream&
+operator<< (::std::ostream&, ErrorType::value);
+
+::std::ostream&
+operator<< (::std::ostream&, const ErrorType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const cardType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const boardType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const positionType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const LoginMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const LoginReplyMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const AwaitMoveMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const TreasuresToGoType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const MoveMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const AcceptMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const WinMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const DisconnectMessageType&);
+
+::std::ostream&
+operator<< (::std::ostream&, const openings&);
+
+::std::ostream&
+operator<< (::std::ostream&, const pin&);
+
+::std::ostream&
+operator<< (::std::ostream&, const row&);
+
+::std::ostream&
+operator<< (::std::ostream&, const MazeCom&);
+
+::std::ostream&
+operator<< (::std::ostream&, const winner&);
 
 #include <iosfwd>
 

@@ -2360,6 +2360,254 @@ winner::
 {
 }
 
+#include <ostream>
+
+::std::ostream&
+operator<< (::std::ostream& o, MazeComType::value i)
+{
+  return o << MazeComType::_xsd_MazeComType_literals_[i];
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const MazeComType& i)
+{
+  return o << static_cast< const ::xml_schema::string& > (i);
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, treasureType::value i)
+{
+  return o << treasureType::_xsd_treasureType_literals_[i];
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const treasureType& i)
+{
+  return o << static_cast< const ::xml_schema::string& > (i);
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, ErrorType::value i)
+{
+  return o << ErrorType::_xsd_ErrorType_literals_[i];
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const ErrorType& i)
+{
+  return o << static_cast< const ::xml_schema::string& > (i);
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const cardType& i)
+{
+  o << ::std::endl << "openings: " << i.openings ();
+  o << ::std::endl << "pin: " << i.pin ();
+  if (i.treasure ())
+  {
+    o << ::std::endl << "treasure: " << *i.treasure ();
+  }
+
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const boardType& i)
+{
+  for (boardType::row_const_iterator
+       b (i.row ().begin ()), e (i.row ().end ());
+       b != e; ++b)
+  {
+    o << ::std::endl << "row: " << *b;
+  }
+
+  o << ::std::endl << "shiftCard: " << i.shiftCard ();
+  if (i.forbidden ())
+  {
+    o << ::std::endl << "forbidden: " << *i.forbidden ();
+  }
+
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const positionType& i)
+{
+  o << ::std::endl << "row: " << i.row ();
+  o << ::std::endl << "col: " << i.col ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const LoginMessageType& i)
+{
+  o << ::std::endl << "name: " << i.name ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const LoginReplyMessageType& i)
+{
+  o << ::std::endl << "newID: " << i.newID ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const AwaitMoveMessageType& i)
+{
+  o << ::std::endl << "board: " << i.board ();
+  for (AwaitMoveMessageType::treasuresToGo_const_iterator
+       b (i.treasuresToGo ().begin ()), e (i.treasuresToGo ().end ());
+       b != e; ++b)
+  {
+    o << ::std::endl << "treasuresToGo: " << *b;
+  }
+
+  for (AwaitMoveMessageType::foundTreasures_const_iterator
+       b (i.foundTreasures ().begin ()), e (i.foundTreasures ().end ());
+       b != e; ++b)
+  {
+    o << ::std::endl << "foundTreasures: " << *b;
+  }
+
+  o << ::std::endl << "treasure: " << i.treasure ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const TreasuresToGoType& i)
+{
+  o << ::std::endl << "player: " << i.player ();
+  o << ::std::endl << "treasures: " << i.treasures ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const MoveMessageType& i)
+{
+  o << ::std::endl << "shiftPosition: " << i.shiftPosition ();
+  o << ::std::endl << "newPinPos: " << i.newPinPos ();
+  o << ::std::endl << "shiftCard: " << i.shiftCard ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const AcceptMessageType& i)
+{
+  o << ::std::endl << "accept: " << i.accept ();
+  o << ::std::endl << "errorCode: " << i.errorCode ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const WinMessageType& i)
+{
+  o << ::std::endl << "board: " << i.board ();
+  o << ::std::endl << "winner: " << i.winner ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const DisconnectMessageType& i)
+{
+  o << ::std::endl << "name: " << i.name ();
+  o << ::std::endl << "errorCode: " << i.errorCode ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const openings& i)
+{
+  o << ::std::endl << "top: " << i.top ();
+  o << ::std::endl << "bottom: " << i.bottom ();
+  o << ::std::endl << "left: " << i.left ();
+  o << ::std::endl << "right: " << i.right ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const pin& i)
+{
+  for (pin::playerID_const_iterator
+       b (i.playerID ().begin ()), e (i.playerID ().end ());
+       b != e; ++b)
+  {
+    o << ::std::endl << "playerID: " << *b;
+  }
+
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const row& i)
+{
+  for (row::col_const_iterator
+       b (i.col ().begin ()), e (i.col ().end ());
+       b != e; ++b)
+  {
+    o << ::std::endl << "col: " << *b;
+  }
+
+  if (i.OptionalAttirbute ())
+  {
+    o << ::std::endl << "OptionalAttirbute: " << *i.OptionalAttirbute ();
+  }
+
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const MazeCom& i)
+{
+  if (i.LoginMessage ())
+  {
+    o << ::std::endl << "LoginMessage: " << *i.LoginMessage ();
+  }
+
+  if (i.LoginReplyMessage ())
+  {
+    o << ::std::endl << "LoginReplyMessage: " << *i.LoginReplyMessage ();
+  }
+
+  if (i.AwaitMoveMessage ())
+  {
+    o << ::std::endl << "AwaitMoveMessage: " << *i.AwaitMoveMessage ();
+  }
+
+  if (i.MoveMessage ())
+  {
+    o << ::std::endl << "MoveMessage: " << *i.MoveMessage ();
+  }
+
+  if (i.AcceptMessage ())
+  {
+    o << ::std::endl << "AcceptMessage: " << *i.AcceptMessage ();
+  }
+
+  if (i.WinMessage ())
+  {
+    o << ::std::endl << "WinMessage: " << *i.WinMessage ();
+  }
+
+  if (i.DisconnectMessage ())
+  {
+    o << ::std::endl << "DisconnectMessage: " << *i.DisconnectMessage ();
+  }
+
+  o << ::std::endl << "mcType: " << i.mcType ();
+  o << ::std::endl << "id: " << i.id ();
+  return o;
+}
+
+::std::ostream&
+operator<< (::std::ostream& o, const winner& i)
+{
+  o << static_cast< const ::xml_schema::string& > (i);
+
+  o << ::std::endl << "id: " << i.id ();
+  return o;
+}
+
 #include <istream>
 #include <xsd/cxx/xml/sax/std-input-source.hxx>
 #include <xsd/cxx/tree/error-handler.hxx>
