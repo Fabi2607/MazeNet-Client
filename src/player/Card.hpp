@@ -44,8 +44,12 @@ class Card {
     return (bool)(pins_ & (1 << (player_id - 1)));
   }
 
-  void setPlayer(int player_id) {
+  inline void setPlayer(int player_id) {
     pins_ |= (1 << (player_id-1));
+  }
+
+  inline void removePlayer(int player_id) {
+    pins_ &= ~(1 << (player_id-1));
   }
 
   inline void setTreasure(int treasure) {

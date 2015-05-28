@@ -7,11 +7,14 @@
 
 
 #include "Card.hpp"
+#include "Position.hpp"
 
 #include <iostream>
 
 class Board {
  public:
+  Card insert_card(Card card,Position new_pos);
+
   Card cards_[7][7];
 
   friend std::ostream& operator<< (std::ostream& stream, const Board& board) {

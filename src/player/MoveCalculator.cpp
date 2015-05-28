@@ -65,3 +65,71 @@ std::vector<Move> MoveCalculator::get_possible_moves(GameSituation& situation) {
 
   return moves;
 }
+
+std::vector<Position> MoveCalculator::get_possible_positions(GameSituation& situation) {
+  std::vector<Position> positions;
+  bool visited[7][7];
+  for(int i = 0; i<7;++i) {
+    for(int j = 0 ; j<7;++j) {
+      visited[i][j] = false;
+    }
+  }
+  std::vector<Position> remaining;
+
+  Position cur_pos = situation.players_[situation.player_id_-1].pos_;
+
+
+  remaining.push_back(situation.players_[situation.player_id_-1].pos_);
+
+  if(cur_pos.row == -1)
+    return remaining;
+
+  while(remaining.size() > 0) {
+    cur_pos = remaining.back();
+    visited[cur_pos.row][cur_pos.col] = true;
+    remaining.pop_back();
+
+    positions.push_back(cur_pos);
+
+    // can move up
+    if(cur_pos.row>0) {
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::UP) &&
+         situation.board_.cards_[cur_pos.row-1][cur_pos.col].isOpen(Card::DOWN) &&
+          !visited[cur_pos.row-1][cur_pos.col]) {
+        Position p = {cur_pos.row-1,cur_pos.col};
+        remaining.emplace_back(p);
+      }
+    }
+    // can move down
+    if(cur_pos.row<6) {
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::UP) &&
+         situation.board_.cards_[cur_pos.row+1][cur_pos.col].isOpen(Card::DOWN) &&
+         !visited[cur_pos.row+1][cur_pos.col]) {
+        Position p = {cur_pos.row+1,cur_pos.col};
+        remaining.emplace_back(p);
+      }
+    }
+
+    // can move left
+    if(cur_pos.col>0) {
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::RIGHT) &&
+         situation.board_.cards_[cur_pos.row][cur_pos.col-1].isOpen(Card::LEFT) &&
+         !visited[cur_pos.row][cur_pos.col-1]) {
+        Position p = {cur_pos.row,cur_pos.col-1};
+        remaining.emplace_back(p);
+      }
+    }
+
+    // can move right
+    if(cur_pos.col<6) {
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::RIGHT) &&
+         situation.board_.cards_[cur_pos.row][cur_pos.col+1].isOpen(Card::LEFT) &&
+         !visited[cur_pos.row][cur_pos.col+1]) {
+        Position p = {cur_pos.row,cur_pos.col+1};
+        remaining.emplace_back(p);
+      }
+    }
+  }
+
+  return positions;
+}

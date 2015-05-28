@@ -8,9 +8,14 @@
 
 #include "Board.hpp"
 #include "Player.hpp"
-
+#include "Move.hpp"
 #include <set>
+
 struct GameSituation {
+  void perform_shift(Move m);
+
+  void setPlayerPos(Position new_pos);
+
   Board board_ = Board();
   Card shiftCard_ = Card();
   int forbidden_row_ = -1;

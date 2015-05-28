@@ -10,11 +10,13 @@
 #include "Move.hpp"
 
 class HeuristicStrategy : public IPlayerStrategy {
+ public:
   virtual Move calculate_next_move() override;
 
   virtual void move_accepted() override;
 
   virtual void move_rejected() override;
+ private:
 };
 
 

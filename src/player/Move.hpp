@@ -12,6 +12,7 @@ struct Move {
   Card shift_card;
   Position shift_pos;
   Position new_pos;
+  int value;
 };
 
 
