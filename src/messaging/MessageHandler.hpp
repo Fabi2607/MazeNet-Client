@@ -9,14 +9,16 @@
 #define _MESSAGEHANDLER_HPP_
 
 #include <string>
+#include <player/IPlayerStrategy.hpp>
 
 #include "../messaging/mazeCom.hxx"
-#include "../player/GameLogic.hpp"
+#include "../player/GameSituation.hpp"
 #include "../util/logging/Log.hpp"
+#include "MessageDispatcher.hpp"
 
 class MessageHandler {
  public:
-  MessageHandler(GameLogic& logic);
+  MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher);
 
   void handle_incoming_message(const std::string& message);
 
@@ -30,9 +32,10 @@ class MessageHandler {
   void update_model(const AwaitMoveMessageType& message);
   void update_board(const boardType& board);
 
-  GameLogic& logic_;
+  std::shared_ptr<IPlayerStrategy> strategy_;
   mazenet::util::logging::Log logger_;
 
+  MessageDispatcher& dispatcher_;
 };
 
 #endif /* _MESSAGEHANDLER_HPP_ */

@@ -7,6 +7,7 @@
 
 #include <sstream>
 #include <messaging/MessageDispatcher.hpp>
+#include <player/HeuristicStrategy.hpp>
 
 #include "network/TcpClient.hpp"
 #include "util/cfg/CfgManager.hpp"
@@ -32,8 +33,7 @@ int main(int argc, char *argv[]) {
     client.openConnection(host, port);
 
     MessageDispatcher dispatcher(client.getConnection());
-    GameLogic logic;
-    MessageHandler handler(logic);
+    MessageHandler handler(std::make_shared<HeuristicStrategy>(), dispatcher);
 
     client.getConnection()->setReadHandler([&handler](const std::string& msg) {
         handler.handle_incoming_message(msg);

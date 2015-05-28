@@ -9,11 +9,11 @@
 
 class Card {
  public:
-  inline Card() : openings_(0), treasure_(0) {
+  inline Card() : openings_(0), treasure_(0), pins_() {
 
   }
 
-  inline Card(int openings, int treasure) : openings_(openings), treasure_(treasure) {
+  inline Card(int openings, int treasure) : openings_(openings), treasure_(treasure), pins_() {
 
   }
 

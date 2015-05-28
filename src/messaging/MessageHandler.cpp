@@ -11,7 +11,7 @@
 #include <sstream>
 #include <iostream>
 
-MessageHandler::MessageHandler(GameLogic& logic) : logic_(logic), logger_("network") {
+MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher) : strategy_(strategy), logger_("network"), dispatcher_(dispatcher) {
 
 }
 
@@ -78,7 +78,7 @@ void MessageHandler::handle_incoming_message(const std::string& message) {
 
 void MessageHandler::handle_login_reply(const LoginReplyMessageType& reply) {
   logger_.log() << "Received: LoginReply " << reply << logger_.end();
-  logic_.setPlayer_id(reply.newID());
+  strategy_->situation_.player_id_ = reply.newID();
 }
 
 void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
@@ -87,15 +87,25 @@ void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
   // if we receive a message we will update our board
   // and start calculationg the next move
   update_model(await_move);
+  Move m= strategy_->calculate_next_move();
+  dispatcher_.sendMove(strategy_->situation_.player_id_, m);
 }
 
 void MessageHandler::handle_accept_message(const AcceptMessageType& accept_message) {
   logger_.log() << "Recceived Accept " << accept_message << logger_.end();
+
+  if(accept_message.accept()) {
+    strategy_->move_accepted();
+  } else {
+    strategy_->move_rejected();
+    Move m= strategy_->calculate_next_move();
+    dispatcher_.sendMove(strategy_->situation_.player_id_, m);
+  }
 }
 
 void MessageHandler::handle_win_message(const WinMessageType& win_message) {
   update_board(win_message.board());
-  if(logic_.getPlayer_id() == win_message.winner().id()) {
+  if(strategy_->situation_.player_id_ == win_message.winner().id()) {
     logger_.logSeverity(mazenet::util::logging::SeverityLevel::critical)
         << "WIN!" << logger_.end();
   } else {
@@ -120,17 +130,17 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
 
   int player_count = 0;
   for(auto treasureToGo: message.treasuresToGo()) {
-    logic_.players_[treasureToGo.player()-1].remainingTreasures_ = treasureToGo.treasures();
+    strategy_->situation_.players_[treasureToGo.player()-1].remainingTreasures_ = treasureToGo.treasures();
     player_count++;
   }
 
-  logic_.found_treasures_.clear();
+  strategy_->situation_.found_treasures_.clear();
   for(auto treasure: message.foundTreasures()) {
-    logic_.found_treasures_.insert(treasure);
+    strategy_->situation_.found_treasures_.insert(treasure);
   }
 
-  logic_.player_count_ = player_count;
-  logic_.treasure_ = message.treasure();
+  strategy_->situation_.player_count_ = player_count;
+  strategy_->situation_.treasure_ = message.treasure();
 
   auto shiftCard = board.shiftCard();
   int openings = 0;
@@ -146,14 +156,14 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
   if(shiftCard.openings().right()) {
     openings |= Card::RIGHT;
   }
-  logic_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
+  strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
 
   if(board.forbidden().present()) {
-    logic_.forbidden_col_ = board.forbidden()->col();
-    logic_.forbidden_row_ = board.forbidden()->row();
+    strategy_->situation_.forbidden_col_ = board.forbidden()->col();
+    strategy_->situation_.forbidden_row_ = board.forbidden()->row();
   } else {
-    logic_.forbidden_col_ = -1;
-    logic_.forbidden_row_ = -1;
+    strategy_->situation_.forbidden_col_ = -1;
+    strategy_->situation_.forbidden_row_ = -1;
   }
 
   update_board(board);
@@ -184,17 +194,17 @@ void MessageHandler::update_board(const boardType& board) {
       if(col.treasure().present()) {
         treasure = col.treasure().get();
         if(treasure < 4){
-          logic_.players_[treasure].home_row_ = cur_row;
-          logic_.players_[treasure].home_col_ = cur_col;
+          strategy_->situation_.players_[treasure].home_row_ = cur_row;
+          strategy_->situation_.players_[treasure].home_col_ = cur_col;
         }
         logger_.log() << "T" << treasure << "(" << cur_row << "|" << cur_col << ")" << logger_.end();
       } else {
         treasure = -1;
       }
-      logic_.board_.cards_[cur_row][cur_col] = Card(openings, treasure);
+      strategy_->situation_.board_.cards_[cur_row][cur_col] = Card(openings, treasure);
       ++cur_col;
     }
     ++cur_row;
   }
-  logger_.log() << "Updated Board: \n" << logic_.board_ << "" << logger_.end();
+  logger_.log() << "Updated Board: \n" << strategy_->situation_.board_ << "" << logger_.end();
 }

@@ -1,1 +1,1 @@
-add_library(player GameLogic.cpp Card.cpp Board.cpp Player.cpp Player.hpp Move.cpp Move.hpp)
+add_library(player GameSituation.cpp Card.cpp Board.cpp Player.cpp Player.hpp Move.cpp Move.hpp IPlayerStrategy.cpp IPlayerStrategy.hpp HeuristicStrategy.cpp HeuristicStrategy.hpp)
