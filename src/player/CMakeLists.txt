@@ -1,1 +1,1 @@
-add_library(player MessageHandler.cpp GameLogic.cpp GameLogic.hpp)
+add_library(player GameLogic.cpp Card.cpp Board.cpp Player.cpp Player.hpp Move.cpp Move.hpp)

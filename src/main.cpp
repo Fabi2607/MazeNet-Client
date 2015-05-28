@@ -6,12 +6,13 @@
  */
 
 #include <sstream>
+#include <messaging/MessageDispatcher.hpp>
 
 #include "network/TcpClient.hpp"
 #include "util/cfg/CfgManager.hpp"
 #include "util/logging/Log.hpp"
 #include "messaging/mazeCom.hxx"
-#include "player/MessageHandler.hpp"
+#include "messaging/MessageHandler.hpp"
 
 int main(int argc, char *argv[]) {
   using namespace mazenet::util::cfg;
@@ -30,20 +31,16 @@ int main(int argc, char *argv[]) {
     logger.log() << "Connecting to: " << host << ":" << port << logger.end();
     client.openConnection(host, port);
 
+    MessageDispatcher dispatcher(client.getConnection());
     GameLogic logic;
     MessageHandler handler(logic);
+
     client.getConnection()->setReadHandler([&handler](const std::string& msg) {
         handler.handle_incoming_message(msg);
       });
 
+    dispatcher.sendLoginMessage("DarkDev");
 
-    MazeCom login_message(MazeComType(MazeComType::LOGIN), 1);
-    login_message.LoginMessage(LoginMessageType(cfgMan.get<std::string>("player.name")));
-
-    std::stringstream ss;
-    MazeCom_(ss, login_message);
-
-    client.getConnection()->send(ss.str());
     client.getIOService().run();
   }
 

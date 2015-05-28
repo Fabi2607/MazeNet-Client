@@ -1,1 +1,1 @@
-add_library(messaging mazeCom.cxx)
+add_library(messaging mazeCom.cxx MessageDispatcher.cpp MessageHandler.cpp)
