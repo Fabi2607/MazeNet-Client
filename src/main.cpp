@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
     logger.log() << "Connecting to: " << host << ":" << port << logger.end();
     client.openConnection(host, port);
 
-    MessageHandler handler;
+    GameLogic logic;
+    MessageHandler handler(logic);
     client.getConnection()->setReadHandler([&handler](const std::string& msg) {
         handler.handle_incoming_message(msg);
       });

@@ -1,1 +1,1 @@
-add_library(player MessageHandler.cpp)
+add_library(player MessageHandler.cpp GameLogic.cpp GameLogic.hpp)
