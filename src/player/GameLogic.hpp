@@ -7,7 +7,17 @@
 
 
 class GameLogic {
+ public:
+  int getPlayer_id() const {
+    return player_id_;
+  }
 
+  void setPlayer_id(int player_id) {
+    player_id_ = player_id;
+  }
+
+ private:
+  int player_id_;
 };
 
 
