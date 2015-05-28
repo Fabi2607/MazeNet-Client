@@ -6,10 +6,12 @@
 #define MAZENET_CLIENT_PLAYER_H
 
 
+#include "Position.hpp"
+
 struct Player {
   int remainingTreasures_ = 0;
-  int home_row_ = -1;
-  int home_col_ = -1;
+  Position home_ = { -1, -1 };
+
 };
 
 

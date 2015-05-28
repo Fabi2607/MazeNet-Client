@@ -6,11 +6,7 @@
 #define MAZENET_CLIENT_MOVE_H
 
 #include "Card.hpp"
-
-struct Position {
-  int row;
-  int col;
-};
+#include "Position.hpp"
 
 struct Move {
   Card shift_card;

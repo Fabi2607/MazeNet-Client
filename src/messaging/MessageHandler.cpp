@@ -1,6 +1,6 @@
 /**
  * @file MessageHandler.cpp
- * @author Fabian Kantereit
+ * @author Dark Dev
  * @date 27-05-2015
  * @brief
  */
@@ -85,7 +85,7 @@ void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
   logger_.log() << "Received: AwaitMove " << logger_.end();
 
   // if we receive a message we will update our board
-  // and start calculationg the next move
+  // and start calculating the next move
   update_model(await_move);
   Move m= strategy_->calculate_next_move();
   dispatcher_.sendMove(strategy_->situation_.player_id_, m);
@@ -129,13 +129,13 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
   auto board = message.board();
 
   int player_count = 0;
-  for(auto treasureToGo: message.treasuresToGo()) {
+  for(auto& treasureToGo: message.treasuresToGo()) {
     strategy_->situation_.players_[treasureToGo.player()-1].remainingTreasures_ = treasureToGo.treasures();
     player_count++;
   }
 
   strategy_->situation_.found_treasures_.clear();
-  for(auto treasure: message.foundTreasures()) {
+  for(auto& treasure: message.foundTreasures()) {
     strategy_->situation_.found_treasures_.insert(treasure);
   }
 
@@ -156,7 +156,12 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
   if(shiftCard.openings().right()) {
     openings |= Card::RIGHT;
   }
+
   strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
+
+  for(auto& player_id: shiftCard.pin().playerID()) {
+    strategy_->situation_.shiftCard_.setPlayer(player_id);
+  }
 
   if(board.forbidden().present()) {
     strategy_->situation_.forbidden_col_ = board.forbidden()->col();
@@ -193,15 +198,20 @@ void MessageHandler::update_board(const boardType& board) {
       int treasure = 0;
       if(col.treasure().present()) {
         treasure = col.treasure().get();
-        if(treasure < 4){
-          strategy_->situation_.players_[treasure].home_row_ = cur_row;
-          strategy_->situation_.players_[treasure].home_col_ = cur_col;
+        if(treasure < 4) {
+          strategy_->situation_.players_[treasure].home_ = { cur_row, cur_col };
         }
         logger_.log() << "T" << treasure << "(" << cur_row << "|" << cur_col << ")" << logger_.end();
       } else {
         treasure = -1;
       }
+
       strategy_->situation_.board_.cards_[cur_row][cur_col] = Card(openings, treasure);
+
+      for(auto player_id: col.pin().playerID()) {
+        strategy_->situation_.board_.cards_[cur_row][cur_col].setPlayer(player_id);
+      }
+
       ++cur_col;
     }
     ++cur_row;
