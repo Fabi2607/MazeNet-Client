@@ -9,6 +9,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+#include <stdio.h>
 #include <iostream>
 
 namespace th {
