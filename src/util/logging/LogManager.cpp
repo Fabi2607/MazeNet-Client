@@ -147,6 +147,9 @@ void LogManager::init() {
         &std::cout, boost::serialization::null_deleter()));
 
     sink->locked_backend()->auto_flush(true);
+
+
+    sink->set_filter((expr::has_attr(severity) && (severity >= mazenet::util::cfg::CfgManager::instance().get<int>("log.verbose_level", 0))));
     boost::log::core::get()->add_sink(sink);
   }
   boost::log::add_common_attributes();

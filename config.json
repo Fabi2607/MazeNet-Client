@@ -13,8 +13,9 @@
     "log":
     {
         "main": "true",
-        "network": "false",
-        "verbose": "false",
-        "level": "0"
+        "network": "true",
+        "verbose": "true",
+        "verbose_level": "2",
+        "level": "3"
     }
 }
