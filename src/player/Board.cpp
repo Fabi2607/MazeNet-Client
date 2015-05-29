@@ -13,8 +13,8 @@ Card Board::insert_card(Card card, Position new_pos) {
     Card save = cards_[new_pos.row][0];
 
     // shift row to the left
-    for(int col=6; col > 0; --col) {
-      cards_[new_pos.row][col-1] = cards_[new_pos.row][col];
+    for(int col=0; col < 6; ++col) {
+      cards_[new_pos.row][col] = cards_[new_pos.row][col+1];
     }
 
     // set new card
@@ -28,8 +28,8 @@ Card Board::insert_card(Card card, Position new_pos) {
     Card save = cards_[new_pos.row][6];
 
     // shift row to the right
-    for(int col=0; col < 6; ++col) {
-      cards_[new_pos.row][col+1] = cards_[new_pos.row][col];
+    for(int col=6; col > 0; --col) {
+      cards_[new_pos.row][col] = cards_[new_pos.row][col-1];
     }
 
     // set new card
@@ -43,8 +43,8 @@ Card Board::insert_card(Card card, Position new_pos) {
     Card save = cards_[6][new_pos.col];
 
     // shift column down
-    for(int row=0; row < 6; ++row) {
-      cards_[row+1][new_pos.col] = cards_[row][new_pos.col];
+    for(int row=6; row > 0; --row) {
+      cards_[row][new_pos.col] = cards_[row-1][new_pos.col];
     }
 
     // set new card
@@ -58,8 +58,8 @@ Card Board::insert_card(Card card, Position new_pos) {
     Card save = cards_[new_pos.row][0];
 
     // shift column up
-    for(int row=6; row > 0; --row) {
-      cards_[row-1][new_pos.col] = cards_[row][new_pos.col];
+    for(int row=0; row < 6; ++row) {
+      cards_[row][new_pos.col] = cards_[row+1][new_pos.col];
     }
     cards_[new_pos.row][new_pos.col] = card;
     return save;
