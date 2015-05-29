@@ -12,7 +12,7 @@
 
 class MoveCalculator {
  public:
-  static std::vector<Move> get_possible_moves(GameSituation& situation);
+  static std::vector<Move> get_possible_moves(const GameSituation& situation);
   static std::vector<Position> get_possible_positions(GameSituation& situation);
  private:
 

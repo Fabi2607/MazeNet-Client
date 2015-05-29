@@ -4,7 +4,7 @@
 
 #include "MoveCalculator.hpp"
 
-std::vector<Move> MoveCalculator::get_possible_moves(GameSituation& situation) {
+std::vector<Move> MoveCalculator::get_possible_moves(const GameSituation& situation) {
   std::vector<Move> moves;
   int insert_col = 0;
   int insert_row = 0;

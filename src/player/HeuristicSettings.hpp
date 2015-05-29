@@ -17,9 +17,10 @@ struct HeuristicSettings {
     reachableHomeCutoff = cfgMan.get<int>("heuristic.base.reachableHomeCutoff");
 
     onTreasureScore = cfgMan.get<int>("heuristic.position.onTargetValue");
-    transitionFieldValue = cfgMan.get<int>("heuristic.position.transitionFieldValue");
+    transitionMoveValue = cfgMan.get<int>("heuristic.position.transitionMoveValue");
     distanceBaseValue = cfgMan.get<int>("heuristic.position.distanceBaseValue");
     distanceFactor = cfgMan.get<int>("heuristic.position.distanceFactor");
+    moveOutOfMapPenalty = cfgMan.get<int>("heuristic.position.moveOutOfMapPenalty");
   }
 
   int reachableFieldValue;
@@ -28,9 +29,10 @@ struct HeuristicSettings {
   int reachableHomeCutoff;
 
   int onTreasureScore;
-  int transitionFieldValue;
+  int transitionMoveValue;
   int distanceBaseValue;
   int distanceFactor;
+  int moveOutOfMapPenalty;
 };
 
 

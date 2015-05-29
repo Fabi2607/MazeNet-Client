@@ -77,12 +77,14 @@ void MessageHandler::handle_incoming_message(const std::string& message) {
 }
 
 void MessageHandler::handle_login_reply(const LoginReplyMessageType& reply) {
-  logger_.log() << "Received: LoginReply " << reply << logger_.end();
+  using SeverityLevel = mazenet::util::logging::SeverityLevel;
+  logger_.logSeverity(SeverityLevel::notification) << "Received: LoginReply " << reply << logger_.end();
   strategy_->situation_.player_id_ = reply.newID();
 }
 
 void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
-  logger_.log() << "Received: AwaitMove " << logger_.end();
+  using SeverityLevel = mazenet::util::logging::SeverityLevel;
+  logger_.logSeverity(SeverityLevel::notification) << "Received: AwaitMove " << logger_.end();
 
   // if we receive a message we will update our board
   // and start calculating the next move
@@ -92,9 +94,10 @@ void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
 }
 
 void MessageHandler::handle_accept_message(const AcceptMessageType& accept_message) {
-  logger_.log() << "Recceived Accept " << accept_message << logger_.end();
+  using SeverityLevel = mazenet::util::logging::SeverityLevel;
 
   if(accept_message.accept()) {
+    logger_.logSeverity(SeverityLevel::notification) << "Move accepted" << accept_message << logger_.end();
     strategy_->move_accepted();
   } else {
     strategy_->move_rejected();
@@ -104,12 +107,13 @@ void MessageHandler::handle_accept_message(const AcceptMessageType& accept_messa
 }
 
 void MessageHandler::handle_win_message(const WinMessageType& win_message) {
+  using SeverityLevel = mazenet::util::logging::SeverityLevel;
   update_board(win_message.board());
   if(strategy_->situation_.player_id_ == win_message.winner().id()) {
-    logger_.logSeverity(mazenet::util::logging::SeverityLevel::critical)
+    logger_.logSeverity(SeverityLevel::critical)
         << "WIN!" << logger_.end();
   } else {
-    logger_.logSeverity(mazenet::util::logging::SeverityLevel::critical)
+    logger_.logSeverity(SeverityLevel::critical)
         << "LOSE! (" << win_message.winner().id() << " won)" << logger_.end();
   }
 
@@ -118,7 +122,8 @@ void MessageHandler::handle_win_message(const WinMessageType& win_message) {
 }
 
 void MessageHandler::handle_disconnect_message(const DisconnectMessageType& disconnect_message) {
-  logger_.log() << "Received DisconnectMessage" << disconnect_message << logger_.end();
+  using SeverityLevel = mazenet::util::logging::SeverityLevel;
+  logger_.logSeverity(SeverityLevel::critical) << "Received DisconnectMessage" << disconnect_message << logger_.end();
 
   // we should do this more gracefully
   exit(1);
@@ -218,5 +223,5 @@ void MessageHandler::update_board(const boardType& board) {
     }
     ++cur_row;
   }
-  logger_.log() << "Updated Board: \n" << strategy_->situation_.board_ << "" << logger_.end();
+  logger_.logSeverity(mazenet::util::logging::SeverityLevel::debug) << "Updated Board: \n" << strategy_->situation_.board_ << "" << logger_.end();
 }

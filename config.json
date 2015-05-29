@@ -16,7 +16,7 @@
         "network": "true",
         "heuristic": "true",
         "verbose": "true",
-        "verbose_level": "2",
+        "verbose_level": "3",
         "level": "0"
     },
     "heuristic":
@@ -29,9 +29,10 @@
         },
         "position": {
             "onTargetValue": "100000",
-            "transitionFieldValue": "1000",
+            "transitionMoveValue": "1000",
             "distanceBaseValue": "100",
-            "distanceFactor": "1"
+            "distanceFactor": "1",
+            "moveOutOfMapPenalty": "1000000"
         }
     }
 }

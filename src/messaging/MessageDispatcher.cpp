@@ -12,12 +12,14 @@ MessageDispatcher::MessageDispatcher(TcpConnection::ConnectionPtr connection) : 
 }
 
 void MessageDispatcher::sendLoginMessage(const std::string& name) {
+  mazenet::util::logging::Log logger("network");
   MazeCom login_message(MazeComType(MazeComType::LOGIN), 0);
   login_message.LoginMessage(LoginMessageType(name));
 
   std::stringstream ss;
   MazeCom_(ss, login_message);
 
+  logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
   connection_->send(ss.str());
 }
 
@@ -50,6 +52,7 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
 
   std::stringstream ss;
   MazeCom_(ss,mazecom_message);
-  logger.log() << ss.str() << logger.end();
+
+  logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
   connection_->send(ss.str());
 }
