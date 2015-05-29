@@ -5,9 +5,11 @@
 #ifndef MAZENET_CLIENT_HEURISTICSTRATEGY_H
 #define MAZENET_CLIENT_HEURISTICSTRATEGY_H
 
-
 #include "IPlayerStrategy.hpp"
 #include "Move.hpp"
+#include "HeuristicSettings.hpp"
+
+#include <vector>
 
 class HeuristicStrategy : public IPlayerStrategy {
  public:
@@ -17,6 +19,10 @@ class HeuristicStrategy : public IPlayerStrategy {
 
   virtual void move_rejected() override;
  private:
+
+  HeuristicSettings settings_;
+  int evaluate_base_score(const GameSituation& situation, const std::vector<Position>& possiblePositions_);
+  int evaluate_position_score(const GameSituation& situation, const Position& position);
 };
 
 

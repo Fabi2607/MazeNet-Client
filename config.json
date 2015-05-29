@@ -14,8 +14,24 @@
     {
         "main": "true",
         "network": "true",
+        "heuristic": "true",
         "verbose": "true",
         "verbose_level": "2",
-        "level": "3"
+        "level": "0"
+    },
+    "heuristic":
+    {
+        "base": {
+            "reachableFieldValue": "1",
+            "reachableTreasureValue": "10",
+            "reachableHomeValue": "10",
+            "reachableHomeCutoff": "3"
+        },
+        "position": {
+            "onTargetValue": "100000",
+            "transitionFieldValue": "1000",
+            "distanceBaseValue": "100",
+            "distanceFactor": "1"
+        }
     }
 }
