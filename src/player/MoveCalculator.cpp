@@ -74,12 +74,13 @@ std::vector<Position> MoveCalculator::get_possible_positions(GameSituation& situ
       visited[i][j] = false;
     }
   }
+
   std::vector<Position> remaining;
 
   Position cur_pos = situation.players_[situation.player_id_-1].pos_;
 
 
-  remaining.push_back(situation.players_[situation.player_id_-1].pos_);
+  remaining.push_back(cur_pos);
 
   if(cur_pos.row == -1)
     return remaining;
@@ -102,8 +103,8 @@ std::vector<Position> MoveCalculator::get_possible_positions(GameSituation& situ
     }
     // can move down
     if(cur_pos.row<6) {
-      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::UP) &&
-         situation.board_.cards_[cur_pos.row+1][cur_pos.col].isOpen(Card::DOWN) &&
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::DOWN) &&
+         situation.board_.cards_[cur_pos.row+1][cur_pos.col].isOpen(Card::UP) &&
          !visited[cur_pos.row+1][cur_pos.col]) {
         Position p = {cur_pos.row+1,cur_pos.col};
         remaining.emplace_back(p);
@@ -112,8 +113,8 @@ std::vector<Position> MoveCalculator::get_possible_positions(GameSituation& situ
 
     // can move left
     if(cur_pos.col>0) {
-      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::RIGHT) &&
-         situation.board_.cards_[cur_pos.row][cur_pos.col-1].isOpen(Card::LEFT) &&
+      if(situation.board_.cards_[cur_pos.row][cur_pos.col].isOpen(Card::LEFT) &&
+         situation.board_.cards_[cur_pos.row][cur_pos.col-1].isOpen(Card::RIGHT) &&
          !visited[cur_pos.row][cur_pos.col-1]) {
         Position p = {cur_pos.row,cur_pos.col-1};
         remaining.emplace_back(p);
