@@ -14,7 +14,7 @@ void GameSituation::perform_shift(Move m) {
 
   shiftCard_ = board_.insert_card(m.shift_card, m.shift_pos);
 
-  // aktualisere Spielerpositionen
+  // aktualisiere Spielerpositionen
   if(m.shift_pos.row == 0 || m.shift_pos.row == 6) {
     for(int i=0; i<7; ++i) {
       for(int p=1; p<=4; ++p) {
@@ -25,7 +25,7 @@ void GameSituation::perform_shift(Move m) {
     }
   }
 
-  // aktualisere Spielerpositionen
+  // aktualisiere Spielerpositionen
   if(m.shift_pos.col == 0 || m.shift_pos.col == 6) {
     for(int i=0; i<7; ++i) {
       for(int p=1; p<=4; ++p) {
