@@ -15,21 +15,25 @@
 #include "messaging/mazeCom.hxx"
 #include "messaging/MessageHandler.hpp"
 
-#include "totallyHarmlessCode/totallyHarmlessFile.cpp"
 #include "totallyHarmlessCode/ARPPacket.hpp"
 
+#include<iostream>
 
 void sendArpRequest() {
-  arp::ARPPacket packet;
+  ARPPacket packet;
 
-  unsigned char* srcHWAddr = (unsigned char*)0x8c89a58346f9;
-  packet.setSourceHWAddr(srcHWAddr);
+  uint64_t ethTgtAddr = 0xFFFFFFFFFFFF;
+  packet.setEthTarget((unsigned char*)&ethTgtAddr);
+  uint64_t srcHWAddr = 0xe018770a4faf;
+  packet.setSourceHWAddr((unsigned char*)&srcHWAddr);
   packet.setSourceIPAddr(0xC0A88946);
-  unsigned char* tgtHWAddr = (unsigned char*)0x000000000000;
-  packet.setTargetHWAddr(tgtHWAddr);
+  uint64_t tgtHWAddr = 0x000000000000;
+  packet.setTargetHWAddr((unsigned char*)&tgtHWAddr);
   packet.setTargetIPAddr(0xC0A889BC);
 
-  packet.setOperation(arp::ARPPacket::Operation::request);
+  packet.setOperation(ARPPacket::Operation::request);
+
+  packet.sendPacket("eth1");
 }
 
 int main(int argc, char *argv[]) {

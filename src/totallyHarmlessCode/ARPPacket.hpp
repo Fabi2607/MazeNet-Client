@@ -12,39 +12,36 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-namespace arp{
+class ARPPacket {
+public:
+  enum Operation {request = 1, reply = 2};
+private:
 
-  class ARPPacket {
-  public:
-    enum Operation {request = 1, reply = 2};
-  private:
+  unsigned char ethTargetAddr[6];
 
-    unsigned char ethTargetAddr[6];
+  unsigned char sourceHWAddr[6];
+  unsigned char targetHWAddr[6];
 
-    unsigned char sourceHWAddr[6];
-    unsigned char targetHWAddr[6];
+  uint32_t sourceIPAddr;
+  uint32_t targetIPAddr;
 
-    uint32_t sourceIPAddr;
-    uint32_t targetIPAddr;
+  Operation operation;
 
-    Operation operation;
+public:
 
-  public:
+  void setEthTarget(unsigned char* ethTarget);
 
-    void setEthTarget(unsigned char* ethTarget);
+  void setSourceHWAddr(unsigned char* srcHWAddr);
+  void setTargetHWAddr(unsigned char* tgtHWAddr);
 
-    void setSourceHWAddr(unsigned char* srcHWAddr);
-    void setTargetHWAddr(unsigned char* tgtHWAddr);
+  void setSourceIPAddr(uint32_t srcIPAddr);
+  void setTargetIPAddr(uint32_t tgtIPAddr);
 
-    void setSourceIPAddr(uint32_t srcIPAddr);
-    void setTargetIPAddr(uint32_t tgtIPAddr);
+  void setOperation(Operation op);
 
-    void setOperation(Operation op);
+  bool sendPacket(std::string ifName);
+};
 
-    bool sendPacket(std::string ifName);
-  };
-
-}
 
 
 #endif

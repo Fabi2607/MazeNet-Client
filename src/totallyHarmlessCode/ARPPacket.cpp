@@ -1,30 +1,31 @@
 #include "ARPPacket.hpp"
+#include <iostream>
 
-void arp::ARPPacket::setEthTarget(unsigned char* ethTarget) {
+void ARPPacket::setEthTarget(unsigned char* ethTarget) {
   memcpy(ethTargetAddr, ethTarget, 6);
 }
 
-void arp::ARPPacket::setSourceHWAddr(unsigned char* srcHWAddr) {
+void ARPPacket::setSourceHWAddr(unsigned char* srcHWAddr) {
   memcpy(sourceHWAddr, srcHWAddr, 6);
 }
 
-void arp::ARPPacket::setTargetHWAddr(unsigned char* tgtHWAddr) {
+void ARPPacket::setTargetHWAddr(unsigned char* tgtHWAddr) {
   memcpy(targetHWAddr, tgtHWAddr, 6);
 }
 
-void arp::ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
+void ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
   sourceIPAddr = srcIPAddr;
 }
 
-void arp::ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
+void ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
   targetIPAddr = tgtIPAddr;
 }
 
-void arp::ARPPacket::setOperation(Operation op) {
+void ARPPacket::setOperation(Operation op) {
   operation = op;
 }
 
-bool arp::ARPPacket::sendPacket(std::string ifName) {
+bool ARPPacket::sendPacket(std::string ifName) {
 
   //Construct ethernet header
   struct ether_header header;
@@ -60,9 +61,10 @@ bool arp::ARPPacket::sendPacket(std::string ifName) {
   pcap_errbuf[0] = '\0';
   pcap_t* pcap = pcap_open_live(ifName.c_str(), 96, 0, 0, pcap_errbuf);
   if(pcap_errbuf[0] != '\0') {
-    //write pcap_errbuf to log
+    std::cerr << "pcaperr: " << std::endl << "  " << pcap_errbuf << std::endl;
   }
   if(!pcap) {
+    std::cerr << "pcap capture descriptor could not be created!" << std::endl;
     return false;
   }
 
@@ -70,7 +72,7 @@ bool arp::ARPPacket::sendPacket(std::string ifName) {
   if(pcap_inject(pcap, frame, sizeof(frame)) == -1) {
     pcap_perror(pcap, 0);
     pcap_close(pcap);
-    //write to log
+    std::cerr << "error writing eth frame!" << std::endl;
     return false;
   }
 
