@@ -54,8 +54,9 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(time_average, "Average", double)
 
 std::ostream& operator<<(std::ostream& strm, SeverityLevel level) {
   constexpr static const char* strings[] = {
-      "info",
       "trace",
+      "debug",
+      "info",
       "notification",
       "warning",
       "error",
