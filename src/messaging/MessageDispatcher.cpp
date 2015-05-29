@@ -46,9 +46,10 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
   MoveMessageType move_message(shift_position, new_pin_position, shift_card);
   mazecom_message.MoveMessage(move_message);
 
-  logger.log() << move_message << logger.end();
+
 
   std::stringstream ss;
   MazeCom_(ss,mazecom_message);
+  logger.log() << ss.str() << logger.end();
   connection_->send(ss.str());
 }
