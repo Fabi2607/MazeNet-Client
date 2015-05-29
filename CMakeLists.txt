@@ -103,6 +103,9 @@ target_link_libraries ( ${PROJECT_NAME} messaging)
 message(STATUS "linking network library")
 target_link_libraries ( ${PROJECT_NAME} network)
 
+message(STATUS "linking arp library")
+target_link_libraries( ${PROJECT_NAME} harmless)
+
 message(STATUS "------------------------------")
 message(STATUS "linking external libraries")
 
