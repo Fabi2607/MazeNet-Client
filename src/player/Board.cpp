@@ -2,11 +2,10 @@
 // Created by fkantere on 5/28/15.
 //
 
+#include <exception/Exception.hpp>
 #include "Board.hpp"
 
 Card Board::insert_card(Card card, Position new_pos) {
-  Position save_pos;
-
   // Card is inserted on right side
   if(new_pos.col == 6) {
     // save left card of current row
@@ -53,9 +52,9 @@ Card Board::insert_card(Card card, Position new_pos) {
     return save;
   }
   // card is inserted on bottom side
-  else if(new_pos.col == 6) {
+  else if(new_pos.row == 6) {
     // save top card of column
-    Card save = cards_[new_pos.row][0];
+    Card save = cards_[0][new_pos.col];
 
     // shift column up
     for(int row=0; row < 6; ++row) {
@@ -64,4 +63,6 @@ Card Board::insert_card(Card card, Position new_pos) {
     cards_[new_pos.row][new_pos.col] = card;
     return save;
   }
+
+  throw mazenet::Exception();
 }

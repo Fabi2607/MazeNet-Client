@@ -51,7 +51,7 @@ Move HeuristicStrategy::calculate_next_move() {
 
   logger.logSeverity(SeverityLevel::notification) << "Calculated situations: " << situations << logger.end();
   logger.logSeverity(SeverityLevel::notification) << "Best Move: (" << best_score << ")"
-  << "\nCard: " << best_move.shift_card << " R: " << best_move.shift_pos.row << " C: " << best_move.shift_pos.row
+  << "\nCard: " << best_move.shift_card << " R: " << best_move.shift_pos.row << " C: " << best_move.shift_pos.col
   << "\nPlayer: " << " R: " << best_move.new_pos.row << " C: " << best_move.new_pos.col << logger.end();
 
   return best_move;

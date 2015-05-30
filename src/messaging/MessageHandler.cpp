@@ -6,10 +6,7 @@
  */
 
 #include "MessageHandler.hpp"
-#include "../player/Card.hpp"
 
-#include <sstream>
-#include <iostream>
 
 MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher) : strategy_(strategy), logger_("network"), dispatcher_(dispatcher) {
 
@@ -100,6 +97,7 @@ void MessageHandler::handle_accept_message(const AcceptMessageType& accept_messa
     logger_.logSeverity(SeverityLevel::notification) << "Move accepted" << accept_message << logger_.end();
     strategy_->move_accepted();
   } else {
+    logger_.logSeverity(SeverityLevel::critical) << "Move rejected\n" << accept_message << logger_.end();
     strategy_->move_rejected();
     Move m= strategy_->calculate_next_move();
     dispatcher_.sendMove(strategy_->situation_.player_id_, m);
@@ -112,13 +110,14 @@ void MessageHandler::handle_win_message(const WinMessageType& win_message) {
   if(strategy_->situation_.player_id_ == win_message.winner().id()) {
     logger_.logSeverity(SeverityLevel::critical)
         << "WIN!" << logger_.end();
+    exit(0);
   } else {
     logger_.logSeverity(SeverityLevel::critical)
         << "LOSE! (" << win_message.winner().id() << " won)" << logger_.end();
+    exit(1);
   }
 
-  // we should do this more gracefully
-  exit(0);
+  // we should do this more gracefully, but this way we can test for the return code
 }
 
 void MessageHandler::handle_disconnect_message(const DisconnectMessageType& disconnect_message) {
@@ -126,7 +125,7 @@ void MessageHandler::handle_disconnect_message(const DisconnectMessageType& disc
   logger_.logSeverity(SeverityLevel::critical) << "Received DisconnectMessage" << disconnect_message << logger_.end();
 
   // we should do this more gracefully
-  exit(1);
+  exit(2);
 }
 
 void MessageHandler::update_model(const AwaitMoveMessageType& message) {
@@ -141,7 +140,7 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
 
   strategy_->situation_.found_treasures_.clear();
   for(auto& treasure: message.foundTreasures()) {
-    strategy_->situation_.found_treasures_.insert(treasure);
+    strategy_->situation_.found_treasures_.insert((int)treasure);
   }
 
   strategy_->situation_.player_count_ = player_count;
