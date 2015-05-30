@@ -1,0 +1,38 @@
+{
+    "server":
+    {
+        "host": "127.0.0.1",
+        "port": "5123",
+        "timeout": "60",
+        "retry": "5"
+    },
+    "player":
+    {
+        "name": "DarkDev"
+    },
+    "log":
+    {
+        "main": "true",
+        "network": "true",
+        "heuristic": "true",
+        "verbose": "true",
+        "verbose_level": "3",
+        "level": "0"
+    },
+    "heuristic":
+    {
+        "base": {
+            "reachableFieldValue": "1",
+            "reachableTreasureValue": "10",
+            "reachableHomeValue": "10",
+            "reachableHomeCutoff": "3"
+        },
+        "position": {
+            "onTargetValue": "100000",
+            "transitionMoveValue": "1000",
+            "distanceBaseValue": "100",
+            "distanceFactor": "1",
+            "moveOutOfMapPenalty": "1000000"
+        }
+    }
+}
