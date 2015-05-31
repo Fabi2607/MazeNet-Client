@@ -16,6 +16,8 @@
 #include "../util/logging/Log.hpp"
 #include "MessageDispatcher.hpp"
 
+
+
 class MessageHandler {
  public:
   MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher);
@@ -32,10 +34,19 @@ class MessageHandler {
   void update_model(const AwaitMoveMessageType& message);
   void update_board(const boardType& board);
 
+  std::shared_ptr<MazeCom> deserialize(const std::string& msg);
+
   std::shared_ptr<IPlayerStrategy> strategy_;
   mazenet::util::logging::Log logger_;
 
   MessageDispatcher& dispatcher_;
+
+  xsd::cxx::tree::error_handler<char> eh;
+  xsd::cxx::xml::dom::bits::error_handler_proxy<char> ehp;
+
+  xercesc::DOMImplementation* impl;
+  xml_schema::dom::unique_ptr<xercesc::DOMLSParser> parser;
+  xercesc::DOMConfiguration* conf_r;
 };
 
 #endif /* _MESSAGEHANDLER_HPP_ */

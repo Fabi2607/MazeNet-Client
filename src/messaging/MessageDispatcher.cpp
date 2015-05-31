@@ -5,10 +5,38 @@
 #include <util/logging/Log.hpp>
 #include "MessageDispatcher.hpp"
 
-#include "mazeCom.hxx"
+const XMLCh ls_id[] = {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
 
-MessageDispatcher::MessageDispatcher(TcpConnection::ConnectionPtr connection) : connection_(connection) {
+MessageDispatcher::MessageDispatcher(TcpConnection::ConnectionPtr connection)
+    : connection_(connection),
+      eh(),
+      ehp(eh),
+      impl(xercesc::DOMImplementationRegistry::getDOMImplementation(ls_id)),
+      writer(impl->createLSSerializer()),
+      conf_w(writer->getDomConfig()){
 
+  conf_w->setParameter(xercesc::XMLUni::fgDOMErrorHandler, &ehp);
+  conf_w->setParameter(xercesc::XMLUni::fgDOMXMLDeclaration, false);
+
+
+  out =
+      xml_schema::dom::unique_ptr<xercesc::DOMLSOutput>(impl->createLSOutput());
+  out->setByteStream(&ft);
+
+  map_[""].name = "";
+  map_[""].schema = "MazeCom.xsd";
+}
+
+void MessageDispatcher::send(const MazeCom& msg) {
+  xml_schema::dom::unique_ptr<xercesc::DOMDocument> doc(
+      MazeCom_(msg, map_));
+
+  ft.reset();
+
+  writer->write(doc.get(), out.get());
+  eh.throw_if_failed<xml_schema::serialization>();
+
+  connection_->send((const char*)(ft.getRawBuffer()));
 }
 
 void MessageDispatcher::sendLoginMessage(const std::string& name) {
@@ -16,11 +44,9 @@ void MessageDispatcher::sendLoginMessage(const std::string& name) {
   MazeCom login_message(MazeComType(MazeComType::LOGIN), 0);
   login_message.LoginMessage(LoginMessageType(name));
 
-  std::stringstream ss;
-  MazeCom_(ss, login_message);
+  send(login_message);
 
-  logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
-  connection_->send(ss.str());
+  // logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
 }
 
 void MessageDispatcher::sendMove(int player_id, const Move& move) {
@@ -48,11 +74,7 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
   MoveMessageType move_message(shift_position, new_pin_position, shift_card);
   mazecom_message.MoveMessage(move_message);
 
+  send(mazecom_message);
 
-
-  std::stringstream ss;
-  MazeCom_(ss,mazecom_message);
-
-  logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
-  connection_->send(ss.str());
+  // logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
 }

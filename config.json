@@ -15,7 +15,7 @@
         "main": "true",
         "network": "true",
         "heuristic": "true",
-        "verbose": "true",
+        "verbose": "false",
         "verbose_level": "3",
         "level": "0"
     },
@@ -33,6 +33,10 @@
             "distanceBaseValue": "100",
             "distanceFactor": "1",
             "moveOutOfMapPenalty": "1000000"
+        },
+        "enemy": {
+            "leadingReachableTreasureValue": "5",
+            "allReachableTreasureValue": "1"
         }
     }
 }
