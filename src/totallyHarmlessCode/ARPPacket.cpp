@@ -1,24 +1,28 @@
 #include "ARPPacket.hpp"
 #include <iostream>
+#include <algorithm>
 
 void ARPPacket::setEthTarget(unsigned char* ethTarget) {
   memcpy(ethTargetAddr, ethTarget, 6);
+  std::reverse(&ethTargetAddr[0], &ethTargetAddr[6]);
 }
 
 void ARPPacket::setSourceHWAddr(unsigned char* srcHWAddr) {
   memcpy(sourceHWAddr, srcHWAddr, 6);
+  std::reverse(&sourceHWAddr[0], &sourceHWAddr[6]);
 }
 
 void ARPPacket::setTargetHWAddr(unsigned char* tgtHWAddr) {
   memcpy(targetHWAddr, tgtHWAddr, 6);
+  std::reverse(&targetHWAddr[0], &targetHWAddr[6]);
 }
 
 void ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
-  sourceIPAddr = srcIPAddr;
+  sourceIPAddr = htonl(srcIPAddr);
 }
 
 void ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
-  targetIPAddr = tgtIPAddr;
+  targetIPAddr = htonl(tgtIPAddr);
 }
 
 void ARPPacket::setOperation(Operation op) {
@@ -41,7 +45,7 @@ bool ARPPacket::sendPacket(std::string ifName) {
   packet.arp_pro = htons(ETH_P_IP);       //Set PTYPE
   packet.arp_hln = ETHER_ADDR_LEN;        //Set HLEN
   packet.arp_pln = sizeof(in_addr_t);     //Set PLEN
-  packet.arp_op = operation;              //Set Operation
+  packet.arp_op = htons(operation);   //Set Operation
   //Set target hardware address
   memcpy(&packet.arp_tha, targetHWAddr, sizeof(packet.arp_tha));
   //Set source hardware address
@@ -77,6 +81,8 @@ bool ARPPacket::sendPacket(std::string ifName) {
   }
 
   pcap_close(pcap);
+
+  std::cout << std::hex << (long)sourceHWAddr << std::endl;
 
   return true;
 }
