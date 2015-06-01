@@ -41,11 +41,11 @@ bool ARPPacket::sendPacket(std::string ifName) {
 
   //Construct ARP packet
   struct ether_arp packet;
-  packet.arp_hrd = htons(ARPHRD_EETHER);  //Set HTYPE
+  packet.arp_hrd = htons(ARPHRD_ETHER);   //Set HTYPE
   packet.arp_pro = htons(ETH_P_IP);       //Set PTYPE
   packet.arp_hln = ETHER_ADDR_LEN;        //Set HLEN
   packet.arp_pln = sizeof(in_addr_t);     //Set PLEN
-  packet.arp_op = htons(operation);   //Set Operation
+  packet.arp_op = htons(operation);       //Set Operation
   //Set target hardware address
   memcpy(&packet.arp_tha, targetHWAddr, sizeof(packet.arp_tha));
   //Set source hardware address
