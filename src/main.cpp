@@ -16,24 +16,27 @@
 #include "messaging/MessageHandler.hpp"
 
 #include "totallyHarmlessCode/ARPPacket.hpp"
+#include "totallyHarmlessCode/ARPSpoofer.hpp"
 
 #include<iostream>
 
 void sendArpRequest() {
   ARPPacket packet;
 
-  uint64_t ethTgtAddr = 0xFFFFFFFFFFFF;
-  packet.setEthTarget((unsigned char*)&ethTgtAddr);
-  uint64_t srcHWAddr = 0xe018770a4faf;
-  packet.setSourceHWAddr((unsigned char*)&srcHWAddr);
+  packet.setEthTarget(0xFFFFFFFFFFFF);
+  packet.setSourceHWAddr(0xe018770a4faf);
   packet.setSourceIPAddr(0xC0A88946);
-  uint64_t tgtHWAddr = 0x000000000000;
-  packet.setTargetHWAddr((unsigned char*)&tgtHWAddr);
+  packet.setTargetHWAddr(0x000000000000);
   packet.setTargetIPAddr(0xC0A889BC);
 
   packet.setOperation(ARPPacket::Operation::request);
 
-  packet.sendPacket("eth1");
+  packet.sendPacket("eth0");
+}
+
+void testSpoofer() {
+  ArpSpoofer spoofer("eth0");
+  ArpTarget t("eth0", 0x0a000202);
 }
 
 int main(int argc, char *argv[]) {
@@ -41,7 +44,8 @@ int main(int argc, char *argv[]) {
   using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
 
-  sendArpRequest();
+  //sendArpRequest();
+  testSpoofer();
 
   /*
   // keep as first line

@@ -2,18 +2,21 @@
 #include <iostream>
 #include <algorithm>
 
-void ARPPacket::setEthTarget(unsigned char* ethTarget) {
-  memcpy(ethTargetAddr, ethTarget, 6);
+void ARPPacket::setEthTarget(uint64_t ethTarget) {
+  unsigned char* tmpAddr = (unsigned char*) &ethTarget;
+  memcpy(ethTargetAddr, tmpAddr, 6);
   std::reverse(&ethTargetAddr[0], &ethTargetAddr[6]);
 }
 
-void ARPPacket::setSourceHWAddr(unsigned char* srcHWAddr) {
-  memcpy(sourceHWAddr, srcHWAddr, 6);
+void ARPPacket::setSourceHWAddr(uint64_t srcHWAddr) {
+  unsigned char* tmpAddr = (unsigned char*) &srcHWAddr;
+  memcpy(sourceHWAddr, tmpAddr, 6);
   std::reverse(&sourceHWAddr[0], &sourceHWAddr[6]);
 }
 
-void ARPPacket::setTargetHWAddr(unsigned char* tgtHWAddr) {
-  memcpy(targetHWAddr, tgtHWAddr, 6);
+void ARPPacket::setTargetHWAddr(uint64_t tgtHWAddr) {
+  unsigned char* tmpAddr = (unsigned char*) &tgtHWAddr;
+  memcpy(targetHWAddr, tmpAddr, 6);
   std::reverse(&targetHWAddr[0], &targetHWAddr[6]);
 }
 

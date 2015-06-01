@@ -29,10 +29,10 @@ private:
 
 public:
 
-  void setEthTarget(unsigned char* ethTarget);
+  void setEthTarget(uint64_t ethTarget);
 
-  void setSourceHWAddr(unsigned char* srcHWAddr);
-  void setTargetHWAddr(unsigned char* tgtHWAddr);
+  void setSourceHWAddr(uint64_t srcHWAddr);
+  void setTargetHWAddr(uint64_t tgtHWAddr);
 
   void setSourceIPAddr(uint32_t srcIPAddr);
   void setTargetIPAddr(uint32_t tgtIPAddr);
