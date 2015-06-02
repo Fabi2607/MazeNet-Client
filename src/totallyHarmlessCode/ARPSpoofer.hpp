@@ -21,7 +21,7 @@ public:
 
 private:
   void getMacAddr();
-  void pcapProcessGetMac(u_char* user, const struct pcap_pkthdr* header, const u_char* packet);
+  void waitForARPRepley();
 };
 
 class ArpConnection {
@@ -53,8 +53,6 @@ public:
   static uint32_t getIpForInterface(std::string ifName);
   static uint64_t getMacForInterface(std::string ifName);
 
-private:
-  void pcapProccesSpoofBack(u_char* user, const struct pcap_pkthdr* header, const u_char* packet);
 };
 
 #endif
