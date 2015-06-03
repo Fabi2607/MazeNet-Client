@@ -5,13 +5,6 @@
 #include "GameSituation.hpp"
 
 void GameSituation::perform_shift(Move m) {
-  // Spieler betritt Spielfeld
-  for(int i = 1; i<=4;++i) {
-    if(shiftCard_.hasPlayer(i)) {
-      players_[i-1].pos_ = m.shift_pos;
-    }
-  }
-
   shiftCard_ = board_.insert_card(m.shift_card, m.shift_pos);
 
   // aktualisiere Spielerpositionen
@@ -39,7 +32,7 @@ void GameSituation::perform_shift(Move m) {
   // Spieler verlässt Spielfeld
   for(int i = 1; i<=4;++i) {
     if(shiftCard_.hasPlayer(i)) {
-      players_[i-1].pos_ = {-1,-1};
+      players_[i-1].pos_ = {m.shift_pos.col,m.shift_pos.row};
     }
   }
 }

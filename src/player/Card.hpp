@@ -99,10 +99,11 @@ class Card {
     return stream;
   }
 
+  int pins_;
  private:
   int openings_;
   int treasure_;
-  int pins_;
+
 };
 
 
