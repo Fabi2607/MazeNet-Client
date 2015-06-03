@@ -7,22 +7,55 @@
 
 #include "MessageHandler.hpp"
 
+const XMLCh ls_id[] = {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
 
-MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher) : strategy_(strategy), logger_("network"), dispatcher_(dispatcher) {
+MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher)
+    : strategy_(strategy), logger_("network"), dispatcher_(dispatcher),
+      eh(),
+      ehp(eh),
+      impl(xercesc::DOMImplementationRegistry::getDOMImplementation(ls_id)),
+      parser(impl->createLSParser(
+          xercesc::DOMImplementationLS::MODE_SYNCHRONOUS, 0)),
+      conf_r(parser->getDomConfig()) {
+
+  conf_r->setParameter(xercesc::XMLUni::fgDOMComments, false);
+  conf_r->setParameter(xercesc::XMLUni::fgDOMDatatypeNormalization, true);
+  conf_r->setParameter(xercesc::XMLUni::fgDOMEntities, false);
+  conf_r->setParameter(xercesc::XMLUni::fgDOMNamespaces, true);
+  conf_r->setParameter(xercesc::XMLUni::fgDOMElementContentWhitespace, false);
+
+  conf_r->setParameter (xercesc::XMLUni::fgDOMErrorHandler, &ehp);
+
+  conf_r->setParameter(xercesc::XMLUni::fgDOMValidate, false);
+  conf_r->setParameter(xercesc::XMLUni::fgXercesSchema, false);
+  conf_r->setParameter(xercesc::XMLUni::fgXercesSchemaFullChecking, false);
+
+  conf_r->setParameter(xercesc::XMLUni::fgXercesUserAdoptsDOMDocument, true);
 
 }
 
-void MessageHandler::handle_incoming_message(const std::string& message) {
-  std::stringstream ss;
-  ss << message;
+std::shared_ptr<MazeCom> MessageHandler::deserialize(const std::string& msg) {
+  xercesc::MemBufInputSource is(reinterpret_cast<const XMLByte*>(msg.c_str()),
+                                msg.length() + 1, "", false);
 
+  is.setCopyBufToStream(false);
+  xercesc::Wrapper4InputSource wis(&is, false);
+  xml_schema::dom::unique_ptr<xercesc::DOMDocument> doc(parser->parse(&wis));
+
+
+  eh.throw_if_failed<xml_schema::parsing>();
+
+  return MazeCom_(*doc);
+}
+
+void MessageHandler::handle_incoming_message(const std::string& message) {
   using SeverityLevel = mazenet::util::logging::SeverityLevel;
 
   logger_.logSeverity(SeverityLevel::trace)
       << message << logger_.end();
 
   try {
-    auto maze_com = MazeCom_(ss, xml_schema::flags::dont_validate);
+    auto maze_com = deserialize(message);
 
     switch(maze_com->mcType()) {
       case MazeComType::LOGIN:

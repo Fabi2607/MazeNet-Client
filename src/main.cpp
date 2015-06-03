@@ -16,6 +16,9 @@
 #include "messaging/MessageHandler.hpp"
 
 int main(int argc, char *argv[]) {
+  xercesc::XMLPlatformUtils::Initialize();
+
+
   using namespace mazenet::util::cfg;
   using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
@@ -44,5 +47,6 @@ int main(int argc, char *argv[]) {
     client.getIOService().run();
   }
 
+  xercesc::XMLPlatformUtils::Terminate();
   return 0;
 }

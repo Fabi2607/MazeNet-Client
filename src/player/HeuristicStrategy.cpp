@@ -26,7 +26,8 @@ Move HeuristicStrategy::calculate_next_move() {
 
     std::vector<Position> positions = MoveCalculator::get_possible_positions(cur_situation);
 
-    logger.logSeverity(SeverityLevel::debug) << "Choice: \n" << cur_situation.board_
+    logger.logSeverity(SeverityLevel::debug) << "Choice:"
+                                                    " \n" << cur_situation.board_
     << "\nPositions: " << logger.end();
 
     int base_score = evaluate_base_score(cur_situation, positions);
