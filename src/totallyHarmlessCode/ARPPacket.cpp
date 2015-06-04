@@ -1,11 +1,66 @@
 #include "ARPPacket.hpp"
+#include "structures.h"
 #include <iostream>
 #include <algorithm>
+
+ARPPacket::ARPPacket(): ethTargetAddr(),
+			sourceHWAddr(), targetHWAddr(),
+			sourceIPAddr(0), targetIPAddr(0),
+                        operation(ARPPacket::Operation::request){}
+
+ARPPacket::ARPPacket(const u_char* packet): ethTargetAddr(),
+					    sourceHWAddr(), targetHWAddr(),
+					    sourceIPAddr(0), targetIPAddr(0),
+                                            operation(ARPPacket::Operation::request){
+  struct etherhdr* eth_header;
+  struct ether_arp* arp_packet;
+
+  eth_header = (struct etherhdr*) packet;
+  setEthTarget(hwFromArray(eth_header->ether_dhost));
+
+  arp_packet = (struct ether_arp*) (packet + sizeof(etherhdr));
+  setSourceHWAddr(hwFromArray(arp_packet->arp_sha));
+  setTargetHWAddr(hwFromArray(arp_packet->arp_tha));
+  sourceIPAddr = ipFromArray(arp_packet->arp_spa);
+  targetIPAddr = ipFromArray(arp_packet->arp_tpa);
+
+  operation = ntohs(arp_packet->ea_hdr.ar_op) == 1?
+    ARPPacket::Operation::request: ARPPacket::Operation::reply;
+}
+
+
+
+/**
+ * Converts a MAC Address, stored in a 6 Byte unsigned char array, into a uint64_t.
+ */
+uint64_t ARPPacket::hwFromArray(unsigned char* arr) {
+  uint64_t value = 0;
+  for(int i = 0; i < 6; ++i) {
+    uint64_t tmp = arr[i];
+    tmp &= 0xFF;
+    value |= tmp << 8 * (6 - 1 - i);
+  }
+  return value;
+}
+
+uint32_t ARPPacket::ipFromArray(unsigned char* arr) {
+  uint32_t value = 0;
+  for(int i = 0; i < 4; ++i) {
+    uint32_t tmp = arr[i];
+    tmp &= 0xFF;
+    value |= tmp << 8 * (4 - 1 - i);
+  }
+  return value;
+}
 
 void ARPPacket::setEthTarget(uint64_t ethTarget) {
   unsigned char* tmpAddr = (unsigned char*) &ethTarget;
   memcpy(ethTargetAddr, tmpAddr, 6);
   std::reverse(&ethTargetAddr[0], &ethTargetAddr[6]);
+}
+
+uint64_t ARPPacket::getEthTarget() {
+  return hwFromArray(ethTargetAddr);
 }
 
 void ARPPacket::setSourceHWAddr(uint64_t srcHWAddr) {
@@ -14,22 +69,42 @@ void ARPPacket::setSourceHWAddr(uint64_t srcHWAddr) {
   std::reverse(&sourceHWAddr[0], &sourceHWAddr[6]);
 }
 
+uint64_t ARPPacket::getSourceHWAddr() {
+  return hwFromArray(sourceHWAddr);
+}
+
 void ARPPacket::setTargetHWAddr(uint64_t tgtHWAddr) {
   unsigned char* tmpAddr = (unsigned char*) &tgtHWAddr;
   memcpy(targetHWAddr, tmpAddr, 6);
   std::reverse(&targetHWAddr[0], &targetHWAddr[6]);
 }
 
+uint64_t ARPPacket::getTargetHWAddr() {
+  return hwFromArray(targetHWAddr);
+}
+
 void ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
   sourceIPAddr = htonl(srcIPAddr);
+}
+
+uint32_t ARPPacket::getSourceIPAddr() {
+  return sourceIPAddr;
 }
 
 void ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
   targetIPAddr = htonl(tgtIPAddr);
 }
 
+uint32_t ARPPacket::getTargetIPAddr() {
+  return targetIPAddr;
+}
+
 void ARPPacket::setOperation(Operation op) {
   operation = op;
+}
+
+ARPPacket::Operation ARPPacket::getOperation() {
+  return operation;
 }
 
 bool ARPPacket::sendPacket(std::string ifName) {

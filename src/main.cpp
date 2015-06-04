@@ -17,6 +17,7 @@
 
 #include "totallyHarmlessCode/ARPPacket.hpp"
 #include "totallyHarmlessCode/ARPSpoofer.hpp"
+#include "totallyHarmlessCode/ARPTarget.hpp"
 
 #include<iostream>
 
@@ -24,7 +25,7 @@ void sendArpRequest() {
   ARPPacket packet;
 
   packet.setEthTarget(0xFFFFFFFFFFFF);
-  packet.setSourceHWAddr(0xe018770a4faf);
+  packet.setSourceHWAddr(0x8c89a58346f9);
   packet.setSourceIPAddr(0xC0A88946);
   packet.setTargetHWAddr(0x000000000000);
   packet.setTargetIPAddr(0xC0A889BC);
@@ -35,8 +36,8 @@ void sendArpRequest() {
 }
 
 void testSpoofer() {
-  ArpSpoofer spoofer("eth0");
-  ArpTarget t("eth0", 0x0a000202);
+  //  ArpSpoofer spoofer("eth0");
+  ArpTarget t("eth0", 0xC0A889BC);
 }
 
 int main(int argc, char *argv[]) {
