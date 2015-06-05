@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/29/15.
-//
-
-#ifndef MAZENET_CLIENT_HEURISTICSETTINGS_H
-#define MAZENET_CLIENT_HEURISTICSETTINGS_H
+#ifndef MAZENET_CLIENT_HEURISTICSETTINGS_HPP
+#define MAZENET_CLIENT_HEURISTICSETTINGS_HPP
 
 #include <util/cfg/CfgManager.hpp>
 
@@ -36,4 +32,4 @@ struct HeuristicSettings {
 };
 
 
-#endif //MAZENET_CLIENT_HEURISTICSETTINGS_H
+#endif //MAZENET_CLIENT_HEURISTICSETTINGS_HPP

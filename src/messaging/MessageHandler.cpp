@@ -1,14 +1,8 @@
-/**
- * @file MessageHandler.cpp
- * @author Dark Dev
- * @date 27-05-2015
- * @brief
- */
-
 #include "MessageHandler.hpp"
 
 
-MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher) : strategy_(strategy), logger_("network"), dispatcher_(dispatcher) {
+MessageHandler::MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher) :
+    strategy_(strategy), logger_("network"), dispatcher_(dispatcher) {
 
 }
 
@@ -19,24 +13,24 @@ void MessageHandler::handle_incoming_message(const std::string& message) {
   using SeverityLevel = mazenet::util::logging::SeverityLevel;
 
   logger_.logSeverity(SeverityLevel::trace)
-      << message << logger_.end();
+  << message << logger_.end();
 
   try {
     auto maze_com = MazeCom_(ss, xml_schema::flags::dont_validate);
 
-    switch(maze_com->mcType()) {
+    switch (maze_com->mcType()) {
       case MazeComType::LOGIN:
         logger_.logSeverity(SeverityLevel::error) << "Received unexpected LoginMessage" << *maze_com << logger_.end();
         break;
       case MazeComType::LOGINREPLY:
-        if(maze_com->LoginReplyMessage()) {
+        if (maze_com->LoginReplyMessage()) {
           handle_login_reply(maze_com->LoginReplyMessage().get());
         } else {
           logger_.logSeverity(SeverityLevel::error) << "Expected LoginReplyMessage not found" << logger_.end();
         }
         break;
       case MazeComType::AWAITMOVE:
-        if(maze_com->AwaitMoveMessage()) {
+        if (maze_com->AwaitMoveMessage()) {
           handle_await_move(maze_com->AwaitMoveMessage().get());
         } else {
           logger_.logSeverity(SeverityLevel::error) << "Expected AwaitMoveMessage not found" << logger_.end();
@@ -46,21 +40,21 @@ void MessageHandler::handle_incoming_message(const std::string& message) {
         logger_.logSeverity(SeverityLevel::error) << "Received unexpected MoveMessage" << logger_.end();
         break;
       case MazeComType::ACCEPT:
-        if(maze_com->AcceptMessage()) {
+        if (maze_com->AcceptMessage()) {
           handle_accept_message(maze_com->AcceptMessage().get());
         } else {
           logger_.logSeverity(SeverityLevel::error) << "Expected AcceptMessage not found" << logger_.end();
         }
         break;
       case MazeComType::WIN:
-        if(maze_com->WinMessage()) {
+        if (maze_com->WinMessage()) {
           handle_win_message(maze_com->WinMessage().get());
         } else {
           logger_.logSeverity(SeverityLevel::error) << "Expected WinMessage not found" << logger_.end();
         }
         break;
       case MazeComType::DISCONNECT:
-        if(maze_com->DisconnectMessage()) {
+        if (maze_com->DisconnectMessage()) {
           handle_disconnect_message(maze_com->DisconnectMessage().get());
         } else {
           logger_.logSeverity(SeverityLevel::error) << "Expected DisconectMessage not found" << logger_.end();
@@ -86,20 +80,20 @@ void MessageHandler::handle_await_move(const AwaitMoveMessageType& await_move) {
   // if we receive a message we will update our board
   // and start calculating the next move
   update_model(await_move);
-  Move m= strategy_->calculate_next_move();
+  Move m = strategy_->calculate_next_move();
   dispatcher_.sendMove(strategy_->situation_.player_id_, m);
 }
 
 void MessageHandler::handle_accept_message(const AcceptMessageType& accept_message) {
   using SeverityLevel = mazenet::util::logging::SeverityLevel;
 
-  if(accept_message.accept()) {
+  if (accept_message.accept()) {
     logger_.logSeverity(SeverityLevel::notification) << "Move accepted" << accept_message << logger_.end();
     strategy_->move_accepted();
   } else {
     logger_.logSeverity(SeverityLevel::critical) << "Move rejected\n" << accept_message << logger_.end();
     strategy_->move_rejected();
-    Move m= strategy_->calculate_next_move();
+    Move m = strategy_->calculate_next_move();
     dispatcher_.sendMove(strategy_->situation_.player_id_, m);
   }
 }
@@ -107,13 +101,13 @@ void MessageHandler::handle_accept_message(const AcceptMessageType& accept_messa
 void MessageHandler::handle_win_message(const WinMessageType& win_message) {
   using SeverityLevel = mazenet::util::logging::SeverityLevel;
   update_board(win_message.board());
-  if(strategy_->situation_.player_id_ == win_message.winner().id()) {
+  if (strategy_->situation_.player_id_ == win_message.winner().id()) {
     logger_.logSeverity(SeverityLevel::critical)
-        << "WIN!" << logger_.end();
+    << "WIN!" << logger_.end();
     exit(0);
   } else {
     logger_.logSeverity(SeverityLevel::critical)
-        << "LOSE! (" << win_message.winner().id() << " won)" << logger_.end();
+    << "LOSE! (" << win_message.winner().id() << " won)" << logger_.end();
     exit(1);
   }
 
@@ -133,14 +127,14 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
   auto board = message.board();
 
   int player_count = 0;
-  for(auto& treasureToGo: message.treasuresToGo()) {
-    strategy_->situation_.players_[treasureToGo.player()-1].remainingTreasures_ = treasureToGo.treasures();
+  for (auto& treasureToGo: message.treasuresToGo()) {
+    strategy_->situation_.players_[treasureToGo.player() - 1].remainingTreasures_ = treasureToGo.treasures();
     player_count++;
   }
 
   strategy_->situation_.found_treasures_.clear();
-  for(auto& treasure: message.foundTreasures()) {
-    strategy_->situation_.found_treasures_.insert((int)treasure);
+  for (auto& treasure: message.foundTreasures()) {
+    strategy_->situation_.found_treasures_.insert((int) treasure);
   }
 
   strategy_->situation_.player_count_ = player_count;
@@ -148,27 +142,27 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
 
   auto shiftCard = board.shiftCard();
   int openings = 0;
-  if(shiftCard.openings().bottom()) {
+  if (shiftCard.openings().bottom()) {
     openings |= Card::DOWN;
   }
-  if(shiftCard.openings().top()) {
+  if (shiftCard.openings().top()) {
     openings |= Card::UP;
   }
-  if(shiftCard.openings().left()) {
+  if (shiftCard.openings().left()) {
     openings |= Card::LEFT;
   }
-  if(shiftCard.openings().right()) {
+  if (shiftCard.openings().right()) {
     openings |= Card::RIGHT;
   }
 
   strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
 
-  for(auto& player_id: shiftCard.pin().playerID()) {
-    strategy_->situation_.players_[player_id-1].pos_ = {-1,-1}; // player is not on the map
+  for (auto& player_id: shiftCard.pin().playerID()) {
+    strategy_->situation_.players_[player_id - 1].pos_ = {-1, -1}; // player is not on the map
     strategy_->situation_.shiftCard_.setPlayer(player_id);
   }
 
-  if(board.forbidden().present()) {
+  if (board.forbidden().present()) {
     strategy_->situation_.forbidden_col_ = board.forbidden()->col();
     strategy_->situation_.forbidden_row_ = board.forbidden()->row();
   } else {
@@ -184,27 +178,27 @@ void MessageHandler::update_board(const boardType& board) {
   int cur_col = 0;
   int openings = 0;
 
-  for(auto row: board.row()) {
-    cur_col=0;
-    for(auto col: row.col()) {
+  for (auto row: board.row()) {
+    cur_col = 0;
+    for (auto col: row.col()) {
       openings = 0;
-      if(col.openings().bottom()) {
+      if (col.openings().bottom()) {
         openings |= Card::DOWN;
       }
-      if(col.openings().top()) {
+      if (col.openings().top()) {
         openings |= Card::UP;
       }
-      if(col.openings().left()) {
+      if (col.openings().left()) {
         openings |= Card::LEFT;
       }
-      if(col.openings().right()) {
+      if (col.openings().right()) {
         openings |= Card::RIGHT;
       }
       int treasure = 0;
-      if(col.treasure().present()) {
+      if (col.treasure().present()) {
         treasure = col.treasure().get();
-        if(treasure < 4) {
-          strategy_->situation_.players_[treasure].home_ = { cur_row, cur_col };
+        if (treasure < 4) {
+          strategy_->situation_.players_[treasure].home_ = {cur_row, cur_col};
         }
         logger_.log() << "T" << treasure << "(" << cur_row << "|" << cur_col << ")" << logger_.end();
       } else {
@@ -213,8 +207,8 @@ void MessageHandler::update_board(const boardType& board) {
 
       strategy_->situation_.board_.cards_[cur_row][cur_col] = Card(openings, treasure);
 
-      for(auto player_id: col.pin().playerID()) {
-        strategy_->situation_.players_[player_id-1].pos_ = {cur_row, cur_col};
+      for (auto player_id: col.pin().playerID()) {
+        strategy_->situation_.players_[player_id - 1].pos_ = {cur_row, cur_col};
         strategy_->situation_.board_.cards_[cur_row][cur_col].setPlayer(player_id);
       }
 
@@ -222,5 +216,6 @@ void MessageHandler::update_board(const boardType& board) {
     }
     ++cur_row;
   }
-  logger_.logSeverity(mazenet::util::logging::SeverityLevel::debug) << "Updated Board: \n" << strategy_->situation_.board_ << "" << logger_.end();
+  logger_.logSeverity(mazenet::util::logging::SeverityLevel::debug) << "Updated Board: \n" <<
+  strategy_->situation_.board_ << "" << logger_.end();
 }

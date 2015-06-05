@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
-#ifndef MAZENET_CLIENT_MESSAGEDISPATCHER_H
-#define MAZENET_CLIENT_MESSAGEDISPATCHER_H
+#ifndef MAZENET_CLIENT_MESSAGEDISPATCHER_HPP
+#define MAZENET_CLIENT_MESSAGEDISPATCHER_HPP
 
 
 #include <network/TcpConnection.hpp>
@@ -22,4 +18,4 @@ class MessageDispatcher {
   TcpConnection::ConnectionPtr connection_;
 };
 
-#endif //MAZENET_CLIENT_MESSAGEDISPATCHER_H
+#endif //MAZENET_CLIENT_MESSAGEDISPATCHER_HPP

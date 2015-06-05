@@ -1,7 +1,3 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
 #include <util/logging/Log.hpp>
 #include "HeuristicStrategy.hpp"
 #include "MoveCalculator.hpp"
@@ -25,7 +21,7 @@ Move HeuristicStrategy::calculate_next_move() {
     int local_best_score = 0;
     Move local_best_move;
 
-    #pragma omp for reduction(+:situations)
+#pragma omp for reduction(+:situations)
     for (size_t i = 0; i < available_basic_moves.size(); ++i) {
       GameSituation cur_situation = situation_;
       cur_situation.perform_shift(available_basic_moves[i]);

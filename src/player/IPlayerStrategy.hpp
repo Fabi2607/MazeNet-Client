@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
-#ifndef MAZENET_CLIENT_IPLAYERSTRATEGY_H
-#define MAZENET_CLIENT_IPLAYERSTRATEGY_H
+#ifndef MAZENET_CLIENT_IPLAYERSTRATEGY_HPP
+#define MAZENET_CLIENT_IPLAYERSTRATEGY_HPP
 
 
 #include "GameSituation.hpp"
@@ -22,4 +18,4 @@ class IPlayerStrategy {
 };
 
 
-#endif //MAZENET_CLIENT_IPLAYERSTRATEGY_H
+#endif //MAZENET_CLIENT_IPLAYERSTRATEGY_HPP

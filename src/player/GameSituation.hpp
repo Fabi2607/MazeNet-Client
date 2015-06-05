@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
-#ifndef MAZENET_CLIENT_GAMELOGIC_H
-#define MAZENET_CLIENT_GAMELOGIC_H
+#ifndef MAZENET_CLIENT_GAMELOGIC_HPP
+#define MAZENET_CLIENT_GAMELOGIC_HPP
 
 
 #include "Board.hpp"
@@ -28,4 +24,4 @@ struct GameSituation {
 };
 
 
-#endif //MAZENET_CLIENT_GAMELOGIC_H
+#endif //MAZENET_CLIENT_GAMELOGIC_HPP

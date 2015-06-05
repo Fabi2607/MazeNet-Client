@@ -1,10 +1,3 @@
-/**
-* @file LogManager.hpp
-* @author Fabian Kantereit
-* @date 23.05.2014 20:38
-*
-* contains the LogManager class
-*/
 #ifndef LOGMANAGER_HPP
 #define LOGMANAGER_HPP
 

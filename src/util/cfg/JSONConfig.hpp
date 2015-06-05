@@ -1,10 +1,3 @@
-/**
-* @file JSONConfig.hpp
-* @author Fabian Kantereit
-* @date 10.11.2014 11:04
-*
-* contains the JSONConfig class
-*/
 #ifndef JSON_CONFIG_HPP
 #define JSON_CONFIG_HPP
 #pragma once
