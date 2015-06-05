@@ -5,10 +5,13 @@
 #include "Position.hpp"
 
 struct Move {
+  Move();
+
   Card shift_card;
   Position shift_pos;
   Position new_pos;
-  int value;
+  int value = 0;
+
 };
 
 

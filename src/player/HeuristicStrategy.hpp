@@ -9,6 +9,8 @@
 
 class HeuristicStrategy : public IPlayerStrategy {
  public:
+  HeuristicStrategy();
+
   virtual Move calculate_next_move() override;
 
   virtual void move_accepted() override;

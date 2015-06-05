@@ -2,6 +2,8 @@
 #include "HeuristicStrategy.hpp"
 #include "MoveCalculator.hpp"
 
+HeuristicStrategy::HeuristicStrategy() : settings_() { }
+
 Move HeuristicStrategy::calculate_next_move() {
   using namespace mazenet::util::logging;
   Log logger("heuristic");

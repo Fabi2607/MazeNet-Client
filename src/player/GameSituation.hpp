@@ -19,7 +19,7 @@ struct GameSituation {
   Player players_[4];
   int treasure_ = -1;
   int player_count_ = -1;
-  std::set<int> found_treasures_;
+  std::set<int> found_treasures_ = std::set<int>{};
   int player_id_ = -1;
 };
 

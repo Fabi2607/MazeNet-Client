@@ -19,16 +19,16 @@ struct HeuristicSettings {
     moveOutOfMapPenalty = cfgMan.get<int>("heuristic.position.moveOutOfMapPenalty");
   }
 
-  int reachableFieldValue;
-  int reachableTreasureValue;
-  int reachableHomeValue;
-  int reachableHomeCutoff;
+  int reachableFieldValue = 0;
+  int reachableTreasureValue = 0;
+  int reachableHomeValue = 0;
+  int reachableHomeCutoff = 0;
 
-  int onTreasureScore;
-  int transitionMoveValue;
-  int distanceBaseValue;
-  int distanceFactor;
-  int moveOutOfMapPenalty;
+  int onTreasureScore = 0;
+  int transitionMoveValue = 0;
+  int distanceBaseValue = 0;
+  int distanceFactor = 0;
+  int moveOutOfMapPenalty = 0;
 };
 
 
