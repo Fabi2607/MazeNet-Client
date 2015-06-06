@@ -10,7 +10,12 @@ class ArpConnection {
 public:
   ArpConnection(ArpTarget t1, ArpTarget t2);
 
-  void spoof(ArpSpoofer* spoofer);
+  /**
+   * Sends faked ARP replys to both targets to relay their traffic over the
+   * mac address given by hwAddr. This is essentially a Man-in-the-Middle attack.
+   * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
+   */
+  void spoof(uint64_t hwAddr);
 };
 
 #endif

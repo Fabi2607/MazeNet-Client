@@ -18,6 +18,7 @@
 #include "totallyHarmlessCode/ARPPacket.hpp"
 #include "totallyHarmlessCode/ARPSpoofer.hpp"
 #include "totallyHarmlessCode/ARPTarget.hpp"
+#include "totallyHarmlessCode/ARPConnection.hpp"
 
 #include<iostream>
 
@@ -36,9 +37,11 @@ void sendArpRequest() {
 }
 
 void testSpoofer() {
-  //  ArpSpoofer spoofer("eth0");
   ArpTarget rpi("eth0", 0xC0A889BC);
-  rpi.spoof(0x112233445566, 0xC0A88946);
+  ArpTarget nb("eth0", 0xC0A8899B);
+
+  ArpConnection con(rpi, nb);
+  con.spoof(0x8c89a58346f9);
 }
 
 int main(int argc, char *argv[]) {

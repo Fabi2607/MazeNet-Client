@@ -4,8 +4,6 @@
 #include <pcap.h>
 #include <string>
 
-class ArpSpoofer;
-
 class ArpTarget {
   std::string interfaceName;
   pcap_t* handle;
