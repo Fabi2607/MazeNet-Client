@@ -160,7 +160,5 @@ bool ARPPacket::sendPacket(std::string ifName) {
 
   pcap_close(pcap);
 
-  std::cout << std::hex << (long)sourceHWAddr << std::endl;
-
   return true;
 }

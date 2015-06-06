@@ -37,7 +37,8 @@ void sendArpRequest() {
 
 void testSpoofer() {
   //  ArpSpoofer spoofer("eth0");
-  ArpTarget t("eth0", 0xC0A889BC);
+  ArpTarget rpi("eth0", 0xC0A889BC);
+  rpi.spoof(0x112233445566, 0xC0A88946);
 }
 
 int main(int argc, char *argv[]) {

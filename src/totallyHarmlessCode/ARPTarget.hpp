@@ -18,6 +18,14 @@ public:
   uint32_t getIPAddr() const;
   uint64_t getMacAddr() const;
 
+  /**
+   * Sends an ARP reply to tell the target, that the host given by ipAddr has the Mac address
+   * given by hwAddr.
+   * @hwAddr source Mac address of the fake reply.
+   * @ipAddr source IP address of the fake reply.
+   */
+  void spoof(uint64_t hwAddr, uint32_t ipAddr);
+
 private:
   void getMacAddr();
   void waitForARPRepley();

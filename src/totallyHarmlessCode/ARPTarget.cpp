@@ -44,8 +44,6 @@ void ArpTarget::waitForARPRepley() {
   bool gotReply = false;
 
   while(!gotReply) {
-
-    printf("-");
     packet = pcap_next(handle, &header);
 
     struct etherhdr* eth_header;
@@ -66,6 +64,21 @@ void ArpTarget::waitForARPRepley() {
       }
     }
   }
+}
+
+void ArpTarget::spoof(uint64_t hwAddr, uint32_t ipAddr) {
+  ARPPacket arpReply;
+  arpReply.setEthTarget(targetMACAddr);
+
+  arpReply.setOperation(ARPPacket::Operation::reply);
+
+  arpReply.setSourceHWAddr(hwAddr);
+  arpReply.setSourceIPAddr(ipAddr);
+
+  arpReply.setTargetHWAddr(targetMACAddr);
+  arpReply.setTargetIPAddr(targetIPAddr);
+
+  arpReply.sendPacket(interfaceName);
 }
 
 /*
