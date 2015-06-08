@@ -2,6 +2,7 @@
 #define ARPCONNECTION_HPP
 
 #include "ARPTarget.hpp"
+#include "ARPPacket.hpp"
 
 class ArpConnection {
   ArpTarget target_one;
@@ -16,6 +17,15 @@ public:
    * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
    */
   void spoof(uint64_t hwAddr);
+
+  /**
+   * Sends a new faked ARP reply if the given packet is an ARP request for one of
+   * the connections targets.
+   * @packet an ARP packet that potentially contains an ARP request for one of
+   * the connections targets.
+   * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
+   */
+  void spoofBack(ARPPacket packet, uint64_t hwAddr);
 };
 
 #endif

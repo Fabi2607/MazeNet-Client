@@ -20,7 +20,8 @@ public:
 
   bool addConnection(const ArpConnection& connection);
 
-  void spoof();
+  void spoof(uint64_t spoofAddr);
+  void setSpoofing(bool pSpoofing);
 
   static uint32_t getIpForInterface(std::string ifName);
   static uint64_t getMacForInterface(std::string ifName);

