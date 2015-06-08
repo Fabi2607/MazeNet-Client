@@ -15,10 +15,10 @@
 #include "messaging/mazeCom.hxx"
 #include "messaging/MessageHandler.hpp"
 
-#include "totallyHarmlessCode/ARPPacket.hpp"
-#include "totallyHarmlessCode/ARPSpoofer.hpp"
-#include "totallyHarmlessCode/ARPTarget.hpp"
-#include "totallyHarmlessCode/ARPConnection.hpp"
+#include "arpdos/ARPPacket.hpp"
+#include "arpdos/ARPSpoofer.hpp"
+#include "arpdos/ARPTarget.hpp"
+#include "arpdos/ARPConnection.hpp"
 
 #include <iostream>
 
