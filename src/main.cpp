@@ -19,7 +19,9 @@
 #include "arpdos/ARPSpoofer.hpp"
 #include "arpdos/ARPTarget.hpp"
 #include "arpdos/ARPConnection.hpp"
+#include "arpdos/ARPScanner.hpp"
 
+#include <vector>
 #include <iostream>
 
 void sendArpRequest() {
@@ -44,13 +46,19 @@ void testSpoofer() {
   con.spoof(0x8c89a58346f9);
 }
 
+void testScanner() {
+  std::vector<ArpTarget> targets = ArpScanner::arpScan("eth0");
+  std::cout << "Found " << targets.size() << " hosts." << std::endl;
+}
+
 int main(int argc, char *argv[]) {
   using namespace mazenet::util::cfg;
   using namespace mazenet::util::logging;
   CfgManager& cfgMan = CfgManager::instance();
 
   //sendArpRequest();
-  testSpoofer();
+  //testSpoofer();
+  testScanner();
 
   /*
   // keep as first line

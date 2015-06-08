@@ -5,17 +5,17 @@
 
 ArpTarget::ArpTarget(std::string ifName, uint32_t pTargetIPAddr):
     interfaceName(ifName),
-    handle(pcap_open_live (interfaceName.c_str(), 1500, 0, 2000, NULL)),
+    handle(pcap_open_live (interfaceName.c_str(), 1500, 0, 100, NULL)),
     targetIPAddr(pTargetIPAddr),
     targetMACAddr(0) {
-  getMacAddr();
+  detMacAddr();
 }
 
 uint32_t ArpTarget::getIPAddr() const { return targetIPAddr; }
 
 uint64_t ArpTarget::getMacAddr() const { return targetMACAddr; }
 
-void ArpTarget::getMacAddr() {
+void ArpTarget::detMacAddr() {
   ARPPacket arpreq;
 
   arpreq.setEthTarget(0xFFFFFFFFFFFF);                 //Set to broadcast address
@@ -42,9 +42,12 @@ void ArpTarget::waitForARPRepley() {
   struct pcap_pkthdr header;
 
   bool gotReply = false;
+  int retry = 0;
 
-  while(!gotReply) {
+  while(!gotReply && retry < MAXRETRY) {
     packet = pcap_next(handle, &header);
+    //timeout
+    if(packet == NULL) return;
 
     struct etherhdr* eth_header;
 
@@ -63,6 +66,7 @@ void ArpTarget::waitForARPRepley() {
 	}
       }
     }
+    ++retry;
   }
 }
 

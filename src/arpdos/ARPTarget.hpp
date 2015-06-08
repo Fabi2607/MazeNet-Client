@@ -11,6 +11,8 @@ class ArpTarget {
   uint64_t targetMACAddr;
 
 public:
+  static const int MAXRETRY = 5;
+
   ArpTarget(std::string ifName, uint32_t pTargetIPAddr);
 
   uint32_t getIPAddr() const;
@@ -25,7 +27,7 @@ public:
   void spoof(uint64_t hwAddr, uint32_t ipAddr);
 
 private:
-  void getMacAddr();
+  void detMacAddr();
   void waitForARPRepley();
 };
 
