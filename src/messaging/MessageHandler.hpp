@@ -1,12 +1,5 @@
-/**
- * @file MessageHandler.hpp
- * @author Dark Dev
- * @date 27-05-2015
- * @brief
- */
-
-#ifndef _MESSAGEHANDLER_HPP_
-#define _MESSAGEHANDLER_HPP_
+#ifndef MAZENET_CLIENT_MESSAGEHANDLER_HPP
+#define MAZENET_CLIENT_MESSAGEHANDLER_HPP
 
 #include <string>
 #include <player/IPlayerStrategy.hpp>
@@ -26,12 +19,17 @@ class MessageHandler {
 
  private:
   void handle_login_reply(const LoginReplyMessageType& reply);
+
   void handle_await_move(const AwaitMoveMessageType& await_move);
+
   void handle_accept_message(const AcceptMessageType& accept_message);
+
   void handle_win_message(const WinMessageType& win_message);
+
   void handle_disconnect_message(const DisconnectMessageType& disconnect_message);
 
   void update_model(const AwaitMoveMessageType& message);
+
   void update_board(const boardType& board);
 
   std::shared_ptr<MazeCom> deserialize(const std::string& msg);
@@ -49,4 +47,4 @@ class MessageHandler {
   xercesc::DOMConfiguration* conf_r;
 };
 
-#endif /* _MESSAGEHANDLER_HPP_ */
+#endif /* MAZENET_CLIENT_MESSAGEHANDLER_HPP */

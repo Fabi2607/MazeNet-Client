@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
-#ifndef MAZENET_CLIENT_MESSAGEDISPATCHER_H
-#define MAZENET_CLIENT_MESSAGEDISPATCHER_H
+#ifndef MAZENET_CLIENT_MESSAGEDISPATCHER_HPP
+#define MAZENET_CLIENT_MESSAGEDISPATCHER_HPP
 
 
 #include <network/TcpConnection.hpp>
@@ -27,7 +23,7 @@
 
 #include "../player/Move.hpp"
 
-class MessageDispatcher {
+class MessageDispatcher : public boost::noncopyable {
  public:
   MessageDispatcher(TcpConnection::ConnectionPtr connection);
 
@@ -50,4 +46,4 @@ class MessageDispatcher {
   xercesc::MemBufFormatTarget ft;
 };
 
-#endif //MAZENET_CLIENT_MESSAGEDISPATCHER_H
+#endif //MAZENET_CLIENT_MESSAGEDISPATCHER_HPP

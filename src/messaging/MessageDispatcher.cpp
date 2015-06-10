@@ -1,7 +1,3 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
 #include <util/logging/Log.hpp>
 #include "MessageDispatcher.hpp"
 
@@ -56,19 +52,19 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
   positionType shift_position(move.shift_pos.row, move.shift_pos.col);
   positionType new_pin_position(move.new_pos.row, move.new_pos.col);
 
-  openings open(move.shift_card.isOpen(Card::UP),move.shift_card.isOpen(Card::DOWN),
+  openings open(move.shift_card.isOpen(Card::UP), move.shift_card.isOpen(Card::DOWN),
                 move.shift_card.isOpen(Card::LEFT), move.shift_card.isOpen(Card::RIGHT));
 
   pin pins;
-  for(int i=1; i < 4; ++i) {
-    if(move.shift_card.hasPlayer(i))
+  for (int i = 1; i < 4; ++i) {
+    if (move.shift_card.hasPlayer(i))
       pins.playerID().emplace_back(i);
   }
 
   cardType shift_card(open, pins);
 
-  if(move.shift_card.getTreasure()!=-1) {
-    shift_card.treasure().set((treasureType::value)move.shift_card.getTreasure());
+  if (move.shift_card.getTreasure() != -1) {
+    shift_card.treasure().set((treasureType::value) move.shift_card.getTreasure());
   }
 
   MoveMessageType move_message(shift_position, new_pin_position, shift_card);

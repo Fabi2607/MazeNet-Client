@@ -1,9 +1,5 @@
-//
-// Created by fkantere on 5/29/15.
-//
-
-#ifndef MAZENET_CLIENT_HEURISTICSETTINGS_H
-#define MAZENET_CLIENT_HEURISTICSETTINGS_H
+#ifndef MAZENET_CLIENT_HEURISTICSETTINGS_HPP
+#define MAZENET_CLIENT_HEURISTICSETTINGS_HPP
 
 #include <util/cfg/CfgManager.hpp>
 
@@ -23,17 +19,17 @@ struct HeuristicSettings {
     moveOutOfMapPenalty = cfgMan.get<int>("heuristic.position.moveOutOfMapPenalty");
   }
 
-  int reachableFieldValue;
-  int reachableTreasureValue;
-  int reachableHomeValue;
-  int reachableHomeCutoff;
+  int reachableFieldValue = 0;
+  int reachableTreasureValue = 0;
+  int reachableHomeValue = 0;
+  int reachableHomeCutoff = 0;
 
-  int onTreasureScore;
-  int transitionMoveValue;
-  int distanceBaseValue;
-  int distanceFactor;
-  int moveOutOfMapPenalty;
+  int onTreasureScore = 0;
+  int transitionMoveValue = 0;
+  int distanceBaseValue = 0;
+  int distanceFactor = 0;
+  int moveOutOfMapPenalty = 0;
 };
 
 
-#endif //MAZENET_CLIENT_HEURISTICSETTINGS_H
+#endif //MAZENET_CLIENT_HEURISTICSETTINGS_HPP

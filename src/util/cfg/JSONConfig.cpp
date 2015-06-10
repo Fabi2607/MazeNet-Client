@@ -1,10 +1,3 @@
-/**
-* @file JSONConfig.cpp
-* @author Fabian Kantereit
-* @date 10.11.2014 11:04
-*
-* contains the JSONConfig implementation
-*/
 #include "JSONConfig.hpp"
 
 // boost

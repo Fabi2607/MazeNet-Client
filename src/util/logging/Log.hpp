@@ -1,10 +1,3 @@
-/**
-* @file Log.hpp
-* @author Fabian Kantereit
-* @date 23.05.2014 21:25
-*
-* implementation of Log class
-*/
 #ifndef LOG_HPP
 #define LOG_HPP
 

@@ -1,5 +1,5 @@
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#ifndef MAZENET_CLIENT_EXCEPTION_HPP
+#define MAZENET_CLIENT_EXCEPTION_HPP
 
 #include <exception>
 #include <boost/exception/exception.hpp>
@@ -16,4 +16,4 @@ class Exception : public virtual std::exception, public virtual boost::exception
 
 }  // namespace mazenet
 
-#endif /* EXCEPTION_H */
+#endif /* MAZENET_CLIENT_EXCEPTION_HPP */

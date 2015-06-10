@@ -1,10 +1,8 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
 #include <util/logging/Log.hpp>
 #include "HeuristicStrategy.hpp"
 #include "MoveCalculator.hpp"
+
+HeuristicStrategy::HeuristicStrategy() : settings_() { }
 
 Move HeuristicStrategy::calculate_next_move() {
   using namespace mazenet::util::logging;
@@ -20,36 +18,51 @@ Move HeuristicStrategy::calculate_next_move() {
 
   // generiere mögliche Züge
   int situations = 0;
-  for (auto& move: available_basic_moves) {
-    GameSituation cur_situation = situation_;
-    cur_situation.perform_shift(move);
 
-    std::vector<Position> positions = MoveCalculator::get_possible_positions(cur_situation);
+#pragma omp parallel
+  {
+    int local_best_score = 0;
+    Move local_best_move;
 
-    logger.logSeverity(SeverityLevel::debug) << "Choice:"
-                                                    " \n" << cur_situation.board_
-    << "\nPositions: " << logger.end();
+#pragma omp for reduction(+:situations)
+    for (size_t i = 0; i < available_basic_moves.size(); ++i) {
+      GameSituation cur_situation = situation_;
+      cur_situation.perform_shift(available_basic_moves[i]);
 
-    int base_score = evaluate_base_score(cur_situation, positions);
+      std::vector<Position> positions = MoveCalculator::get_possible_positions(cur_situation);
+#if 0
+      logger.logSeverity(SeverityLevel::debug) << "Choice: \n" << cur_situation.board_
+      << "\nPositions: " << logger.end();
+#endif
+      int base_score = evaluate_base_score(cur_situation, positions);
 
-    Move current_move = move;
-    for (auto& pos: positions) {
+      Move current_move = available_basic_moves[i];
+      for (auto& pos: positions) {
 
-      current_move.new_pos = pos;
+        current_move.new_pos = pos;
 
-      int actual_score = base_score;
-      actual_score += evaluate_position_score(cur_situation, pos);
-      logger.log() << "\nR: " << pos.row << " C: " << pos.col
-      << " Score: " << actual_score << logger.end();
-
-      if (actual_score > best_score) {
-        best_move = current_move;
-        best_score = actual_score;
+        int actual_score = base_score;
+        actual_score += evaluate_position_score(cur_situation, pos);
+#if 0
+        logger.log() << "\nR: " << pos.row << " C: " << pos.col
+        << " Score: " << actual_score << logger.end();
+#endif
+        if (actual_score > local_best_score) {
+          local_best_move = current_move;
+          local_best_score = actual_score;
+        }
+        situations++;
       }
-      situations++;
+    }
+
+#pragma omp critical
+    {
+      if (local_best_score > best_score) {
+        best_score = local_best_score;
+        best_move = local_best_move;
+      }
     }
   }
-
   logger.logSeverity(SeverityLevel::notification) << "Calculated situations: " << situations << logger.end();
   logger.logSeverity(SeverityLevel::notification) << "Best Move: (" << best_score << ")"
   << "\nCard: " << best_move.shift_card << " R: " << best_move.shift_pos.row << " C: " << best_move.shift_pos.col
@@ -97,7 +110,7 @@ int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, c
 
   auto& cur_card = situation.board_.cards_[position.row][position.col];
 
-  Position target_pos;
+//  Position target_pos;
 
   if (position.row == -1 && position.col == -1) {
     score -= settings_.moveOutOfMapPenalty;
@@ -112,7 +125,7 @@ int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, c
         if (situation.board_.cards_[row][col].getTreasure() == situation.treasure_) {
           int distance = ::abs(position.row - row) + ::abs(position.col - col);
 
-          target_pos = {row, col};
+//          target_pos = {row, col};
           score += settings_.distanceBaseValue / (distance * settings_.distanceFactor);
         };
       }

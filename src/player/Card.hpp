@@ -1,19 +1,15 @@
-//
-// Created by fkantere on 5/28/15.
-//
-
-#ifndef MAZENET_CLIENT_CARD_H
-#define MAZENET_CLIENT_CARD_H
+#ifndef MAZENET_CLIENT_CARD_HPP
+#define MAZENET_CLIENT_CARD_HPP
 
 #include <iostream>
 
 class Card {
  public:
-  inline Card() : openings_(0), treasure_(0), pins_() {
+  inline Card() {
 
   }
 
-  inline Card(int openings, int treasure) : openings_(openings), treasure_(treasure), pins_() {
+  inline Card(int openings, int treasure) : openings_(openings), treasure_(treasure) {
 
   }
 
@@ -25,7 +21,7 @@ class Card {
   };
 
   inline bool isOpen(Opening direction) const {
-    return (bool)(openings_ & direction);
+    return (bool) (openings_ & direction);
   }
 
   inline void setOpen(Opening direction) {
@@ -41,15 +37,15 @@ class Card {
   }
 
   inline bool hasPlayer(int player_id) const {
-    return (bool)(pins_ & (1 << (player_id - 1)));
+    return (bool) (pins_ & (1 << (player_id - 1)));
   }
 
   inline void setPlayer(int player_id) {
-    pins_ |= (1 << (player_id-1));
+    pins_ |= (1 << (player_id - 1));
   }
 
   inline void removePlayer(int player_id) {
-    pins_ &= ~(1 << (player_id-1));
+    pins_ &= ~(1 << (player_id - 1));
   }
 
   inline void setTreasure(int treasure) {
@@ -61,9 +57,9 @@ class Card {
     // RIGHT -> UP
     // DOWN -> RiGHT
     // LEFT -> DOWN
-    bool up_set = (bool)(openings_ & UP);
+    bool up_set = (bool) (openings_ & UP);
     openings_ >>= 1;
-    if(up_set) {
+    if (up_set) {
       openings_ |= LEFT;
     }
   }
@@ -73,38 +69,61 @@ class Card {
     // DOWN -> LEFT
     // RIGHT -> DOWN
     // UP -> RIGHT
-    bool left_set = (bool)(openings_ & LEFT);
+    bool left_set = (bool) (openings_ & LEFT);
     openings_ <<= 1;
     openings_ &= 0xF;
-    if(left_set) {
+    if (left_set) {
       openings_ |= UP;
     }
   }
 
-  friend std::ostream& operator<< (std::ostream& stream, const Card& card) {
-    switch(card.openings_) {
-      case Card::UP | Card::DOWN: stream << "║"; break;
-      case Card::UP | Card::LEFT: stream << "╝"; break;
-      case Card::UP | Card::RIGHT: stream << "╚"; break;
-      case Card::UP | Card::DOWN | Card::LEFT: stream << "╣"; break;
-      case Card::UP | Card::DOWN | Card::RIGHT: stream << "╠"; break;
-      case Card::UP | Card::LEFT | Card::RIGHT: stream << "╩"; break;
-      case Card::UP | Card::DOWN | Card::LEFT | Card::RIGHT: stream << "╬"; break;
-      case Card::DOWN | Card::LEFT: stream << "╗"; break;
-      case Card::DOWN | Card::RIGHT: stream << "╔"; break;
-      case Card::DOWN | Card::LEFT | Card::RIGHT: stream << "╦"; break;
-      case Card::LEFT | Card::RIGHT: stream << "═"; break;
-      default: stream << " ";
+  friend std::ostream& operator<<(std::ostream& stream, const Card& card) {
+    switch (card.openings_) {
+      case Card::UP | Card::DOWN:
+        stream << "║";
+        break;
+      case Card::UP | Card::LEFT:
+        stream << "╝";
+        break;
+      case Card::UP | Card::RIGHT:
+        stream << "╚";
+        break;
+      case Card::UP | Card::DOWN | Card::LEFT:
+        stream << "╣";
+        break;
+      case Card::UP | Card::DOWN | Card::RIGHT:
+        stream << "╠";
+        break;
+      case Card::UP | Card::LEFT | Card::RIGHT:
+        stream << "╩";
+        break;
+      case Card::UP | Card::DOWN | Card::LEFT | Card::RIGHT:
+        stream << "╬";
+        break;
+      case Card::DOWN | Card::LEFT:
+        stream << "╗";
+        break;
+      case Card::DOWN | Card::RIGHT:
+        stream << "╔";
+        break;
+      case Card::DOWN | Card::LEFT | Card::RIGHT:
+        stream << "╦";
+        break;
+      case Card::LEFT | Card::RIGHT:
+        stream << "═";
+        break;
+      default:
+        stream << " ";
     }
     return stream;
   }
 
-  int pins_;
+  int pins_ = 0;
  private:
-  int openings_;
-  int treasure_;
+  int openings_ = 0;
+  int treasure_ = 0;
 
 };
 
 
-#endif //MAZENET_CLIENT_CARD_H
+#endif //MAZENET_CLIENT_CARD_HPP
