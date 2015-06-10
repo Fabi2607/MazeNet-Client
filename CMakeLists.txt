@@ -17,7 +17,6 @@ set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS}")
 
 add_definitions(-DBOOST_LOG_DYN_LINK)
-add_definitions(-DLITTLE_ENDIAN_TCP_LENGTH)
 
 # set custom modul path
 set(CMAKE_MODULE_PATH "${MazeNet-Client_SOURCE_DIR}/scripts/cmake/")
