@@ -23,6 +23,8 @@
 
 #include "../player/Move.hpp"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++" //Ignoring the warning.
 class MessageDispatcher : public boost::noncopyable {
  public:
   MessageDispatcher(TcpConnection::ConnectionPtr connection);
@@ -45,5 +47,6 @@ class MessageDispatcher : public boost::noncopyable {
 
   xercesc::MemBufFormatTarget ft;
 };
+#pragma GCC diagnostic pop
 
 #endif //MAZENET_CLIENT_MESSAGEDISPATCHER_HPP

@@ -3,6 +3,8 @@
 
 const XMLCh ls_id[] = {xercesc::chLatin_L, xercesc::chLatin_S, xercesc::chNull};
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++" //Ignoring the warning.
 MessageDispatcher::MessageDispatcher(TcpConnection::ConnectionPtr connection)
     : connection_(connection),
       eh(),
@@ -74,3 +76,4 @@ void MessageDispatcher::sendMove(int player_id, const Move& move) {
 
   // logger.logSeverity(mazenet::util::logging::SeverityLevel::trace) << ss.str() << logger.end();
 }
+#pragma GCC diagnostic pop

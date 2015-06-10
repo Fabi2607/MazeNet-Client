@@ -11,6 +11,8 @@
 
 
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++" //Ignoring the warning.
 class MessageHandler {
  public:
   MessageHandler(std::shared_ptr<IPlayerStrategy> strategy, MessageDispatcher& dispatcher);
@@ -44,7 +46,10 @@ class MessageHandler {
 
   xercesc::DOMImplementation* impl;
   xml_schema::dom::unique_ptr<xercesc::DOMLSParser> parser;
+
   xercesc::DOMConfiguration* conf_r;
+
 };
+#pragma GCC diagnostic pop
 
 #endif /* MAZENET_CLIENT_MESSAGEHANDLER_HPP */
