@@ -11,7 +11,8 @@ class ArpTarget {
   uint64_t targetMACAddr;
 
 public:
-  static const int MAXRETRY = 5;
+  //timeout when trying to detremine the mac address in milliseconds.
+  static const int TIMEOUT = 100;
 
   ArpTarget(std::string ifName, uint32_t pTargetIPAddr);
 

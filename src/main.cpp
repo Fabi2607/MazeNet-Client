@@ -48,7 +48,11 @@ void testSpoofer() {
 
 void testScanner() {
   std::vector<ArpTarget> targets = ArpScanner::arpScan("eth0");
-  std::cout << "Found " << targets.size() << " hosts." << std::endl;
+  std::cout << "Found " << targets.size() << " hosts." << std::endl << std::endl;
+
+  for(auto itr = targets.begin(); itr != targets.end(); ++itr) {
+    std::cout << std::hex << (*itr).getIPAddr() << std::endl;
+  }
 }
 
 int main(int argc, char *argv[]) {

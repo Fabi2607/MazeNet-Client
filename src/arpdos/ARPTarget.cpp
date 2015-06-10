@@ -3,9 +3,11 @@
 #include "structures.h"
 #include "ARPSpoofer.hpp"
 
+#include <chrono>
+
 ArpTarget::ArpTarget(std::string ifName, uint32_t pTargetIPAddr):
     interfaceName(ifName),
-    handle(pcap_open_live (interfaceName.c_str(), 1500, 0, 100, NULL)),
+    handle(pcap_open_live (interfaceName.c_str(), 1500, 0, TIMEOUT/10, NULL)),
     targetIPAddr(pTargetIPAddr),
     targetMACAddr(0) {
   detMacAddr();
@@ -42,9 +44,14 @@ void ArpTarget::waitForARPRepley() {
   struct pcap_pkthdr header;
 
   bool gotReply = false;
-  int retry = 0;
 
-  while(!gotReply && retry < MAXRETRY) {
+  auto start = std::chrono::duration_cast<std::chrono::milliseconds>
+    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+  auto current = std::chrono::duration_cast<std::chrono::milliseconds>
+    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+  while(!gotReply && current < start + TIMEOUT) {
     packet = pcap_next(handle, &header);
     //timeout
     if(packet == NULL) return;
@@ -66,7 +73,8 @@ void ArpTarget::waitForARPRepley() {
 	}
       }
     }
-    ++retry;
+    current = std::chrono::duration_cast<std::chrono::milliseconds>
+      (std::chrono::system_clock::now().time_since_epoch()).count();
   }
 }
 
