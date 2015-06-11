@@ -1,0 +1,75 @@
+#include "ARPScanner.hpp"
+#include "ARPSpoofer.hpp"
+#include "ARPPacket.hpp"
+#include "structures.h"
+
+#include <chrono>
+#include <pcap.h>
+
+#include <iostream>
+
+std::vector<ArpTarget> ArpScanner::arpScan(std::string ifName) {
+
+  std::vector<ArpTarget> ret;
+  std::vector<ARPPacket> packets;
+  std::vector<uint32_t> foundHosts;
+
+  pcap_t* handle = pcap_open_live(ifName.c_str(), 1500, 0, 100, NULL);
+
+  uint32_t ipAddr = ArpSpoofer::getIpForInterface(ifName);
+  for(uint32_t i = ipAddr & 0xFFFFFF00; i <= (ipAddr & 0xFFFFFF00) + 0xFF; ++i) {
+    if(i != ipAddr) {
+      ARPPacket packet;
+      packet.setEthTarget(0xFFFFFFFFFFFF);
+      packet.setOperation(ARPPacket::Operation::request);
+      packet.setSourceHWAddr(ArpSpoofer::getMacForInterface(ifName));
+      packet.setSourceIPAddr(ArpSpoofer::getIpForInterface(ifName));
+      packet.setTargetHWAddr(0xFFFFFFFFFFFF);
+      packet.setTargetIPAddr(i);
+
+      packets.push_back(packet);
+    }
+  }
+
+  for(auto itr = packets.begin(); itr != packets.end(); ++itr) {
+    (*itr).sendPacket(ifName);
+  }
+
+  const u_char* packet;
+  struct pcap_pkthdr header;
+
+  std::chrono::milliseconds start = std::chrono::duration_cast<std::chrono::milliseconds>
+    (std::chrono::system_clock::now().time_since_epoch());
+
+  std::chrono::milliseconds current = std::chrono::duration_cast<std::chrono::milliseconds>
+    (std::chrono::system_clock::now().time_since_epoch());
+
+  while(current.count() < start.count() + 10000) {
+    packet = pcap_next(handle, &header);
+    std::cout << "ne";
+    struct etherhdr* eth_header = (struct etherhdr*) packet;
+    std::cout << "xt" << std::endl;
+
+    if(ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
+      std::cout << "arp" << std::endl;
+      ARPPacket arpPacket(packet);
+
+      if(arpPacket.getOperation() == ARPPacket::Operation::reply) {
+	std::cout << "reply" << std::endl;
+	foundHosts.push_back(arpPacket.getSourceIPAddr());
+      }
+    }
+
+    current = std::chrono::duration_cast<std::chrono::milliseconds>
+      (std::chrono::system_clock::now().time_since_epoch());
+  }
+
+  std::cout << "!!" << std::endl;
+
+  for(auto itr = foundHosts.begin(); itr != foundHosts.end(); ++itr) {
+    ArpTarget target(ifName, (*itr));
+    ret.push_back(target);
+  }
+
+  return ret;
+}

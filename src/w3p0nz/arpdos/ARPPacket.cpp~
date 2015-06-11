@@ -1,0 +1,91 @@
+#include "ARPPacket.hpp"
+#include <iostream>
+#include <algorithm>
+
+void ARPPacket::setEthTarget(uint64_t ethTarget) {
+  unsigned char* tmpAddr = (unsigned char*) &ethTarget;
+  memcpy(ethTargetAddr, ethTarget, 6);
+  std::reverse(&ethTargetAddr[0], &ethTargetAddr[6]);
+}
+
+void ARPPacket::setSourceHWAddr(uint64_t srcHWAddr) {
+  unsigned char* tmpAddr = (unsigned char*) &srcHWAddr;
+  memcpy(sourceHWAddr, srcHWAddr, 6);
+  std::reverse(&sourceHWAddr[0], &sourceHWAddr[6]);
+}
+
+void ARPPacket::setTargetHWAddr(uint64_t tgtHWAddr) {
+  unsigned char* tmpAddr = (unsigned char*) &tgtHWAddr;
+  memcpy(targetHWAddr, tgtHWAddr, 6);
+  std::reverse(&targetHWAddr[0], &targetHWAddr[6]);
+}
+
+void ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
+  sourceIPAddr = htonl(srcIPAddr);
+}
+
+void ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
+  targetIPAddr = htonl(tgtIPAddr);
+}
+
+void ARPPacket::setOperation(Operation op) {
+  operation = op;
+}
+
+bool ARPPacket::sendPacket(std::string ifName) {
+
+  //Construct ethernet header
+  struct ether_header header;
+  header.ether_type = htons(ETH_P_ARP);
+  //Set target address
+  memcpy(header.ether_dhost, ethTargetAddr, sizeof(header.ether_dhost));
+  //Set source address
+  memcpy(header.ether_shost, sourceHWAddr, sizeof(header.ether_shost));
+
+  //Construct ARP packet
+  struct ether_arp packet;
+  packet.arp_hrd = htons(ARPHRD_ETHER);   //Set HTYPE
+  packet.arp_pro = htons(ETH_P_IP);       //Set PTYPE
+  packet.arp_hln = ETHER_ADDR_LEN;        //Set HLEN
+  packet.arp_pln = sizeof(in_addr_t);     //Set PLEN
+  packet.arp_op = htons(operation);       //Set Operation
+  //Set target hardware address
+  memcpy(&packet.arp_tha, targetHWAddr, sizeof(packet.arp_tha));
+  //Set source hardware address
+  memcpy(&packet.arp_sha, sourceHWAddr, sizeof(packet.arp_sha));
+  //Set target protocol address
+  memcpy(&packet.arp_tpa, &targetIPAddr, sizeof(packet.arp_tpa));
+  //Set source protocol address
+  memcpy(&packet.arp_spa, &sourceIPAddr, sizeof(packet.arp_spa));
+
+  //Combine ethernet header and APR packet
+  unsigned char frame[sizeof(struct ether_header) + sizeof(ether_arp)];
+  memcpy(frame, &header, sizeof(struct ether_header));
+  memcpy(frame + sizeof(struct ether_header), &packet, sizeof(struct ether_arp));
+
+  //Open PCAP packet capture descriptor
+  char pcap_errbuf[PCAP_ERRBUF_SIZE];
+  pcap_errbuf[0] = '\0';
+  pcap_t* pcap = pcap_open_live(ifName.c_str(), 96, 0, 0, pcap_errbuf);
+  if(pcap_errbuf[0] != '\0') {
+    std::cerr << "pcaperr: " << std::endl << "  " << pcap_errbuf << std::endl;
+  }
+  if(!pcap) {
+    std::cerr << "pcap capture descriptor could not be created!" << std::endl;
+    return false;
+  }
+
+  //write ethernet frame to the network interface
+  if(pcap_inject(pcap, frame, sizeof(frame)) == -1) {
+    pcap_perror(pcap, 0);
+    pcap_close(pcap);
+    std::cerr << "error writing eth frame!" << std::endl;
+    return false;
+  }
+
+  pcap_close(pcap);
+
+  std::cout << std::hex << (long)sourceHWAddr << std::endl;
+
+  return true;
+}

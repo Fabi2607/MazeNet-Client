@@ -1,0 +1,15 @@
+#ifndef SCUDSTORM_HPP
+#define SCUDSTORM_HPP
+
+class ScudStorm {
+
+  bool locked;
+
+public:
+
+  void lockTarget(uint32_t targetIpAddr);
+  void fire();
+
+};
+
+#endif
