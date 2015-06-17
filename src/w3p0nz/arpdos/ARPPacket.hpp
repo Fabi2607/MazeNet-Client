@@ -75,10 +75,11 @@ public:
    */
   bool sendPacket(std::string ifName);
 
+  static uint32_t ipFromArray(unsigned char* arr);
 private:
 
   uint64_t hwFromArray(unsigned char* arr);
-  uint32_t ipFromArray(unsigned char* arr);
+
 };
 
 

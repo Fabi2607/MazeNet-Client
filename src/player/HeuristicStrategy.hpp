@@ -6,6 +6,7 @@
 #include "HeuristicSettings.hpp"
 
 #include <vector>
+#include <w3p0nz/arpdos/ScudStorm.hpp>
 
 class HeuristicStrategy : public IPlayerStrategy {
  public:
@@ -17,9 +18,12 @@ class HeuristicStrategy : public IPlayerStrategy {
 
   virtual void move_rejected() override;
 
- private:
+private:
+  bool firstRun = true;
 
   HeuristicSettings settings_;
+
+  ScudStorm GLAFinestWeapon_ = ScudStorm("eth0");
 
   int evaluate_base_score(const GameSituation& situation, const std::vector<Position>& possiblePositions_);
 

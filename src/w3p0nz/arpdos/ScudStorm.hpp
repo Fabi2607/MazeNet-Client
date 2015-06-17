@@ -24,13 +24,13 @@ public:
    * Use this method to point your scud storm to the game server.
    * @targetIpAddr the ip address of the game server.
    */
-  void lockTarget(uint32_t targetIpAddr);
+  int lockTarget(uint32_t targetIpAddr);
 
   /**
    * This method fires the scud storm (launches the dos attack) and keeps the targets down
    * indefinitely (that means it won't return).
    */
-  void fire();
+  int fire();
 
 };
 
