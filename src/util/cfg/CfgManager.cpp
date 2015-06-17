@@ -1,10 +1,3 @@
-/**
-* @file LogManager.cpp
-* @author Fabian Kantereit
-* @date 10.11.2014 10:04
-*
-* contains the CfgManager class implementation
-*/
 #include <Constants.hpp>
 #include "CfgManager.hpp"
 
@@ -19,8 +12,8 @@ CfgManager::CfgManager() : mutex_(), cmdOpts_(), overrides_(), configuration_() 
     configuration_.load(cCfgFile);
   } catch (...) {
     std::cout << "critical initialization error, config invalid please create "
-                 "a default one, or check the existing configuration for errors"
-              << std::endl;
+        "a default one, or check the existing configuration for errors"
+    << std::endl;
     throw mazenet::Exception();
   }
 }
@@ -63,7 +56,7 @@ void CfgManager::translateCmdOpts() {
     overrides_.set("server.port", cmdOpts_.vm_["port"].as<std::string>());
   }
 
-  if(cmdOpts_.vm_.count("name")) {
+  if (cmdOpts_.vm_.count("name")) {
     overrides_.set("player.name", cmdOpts_.vm_["name"].as<std::string>());
   }
 
@@ -98,19 +91,19 @@ void CfgManager::createDefault() {
   lock_guard<recursive_mutex> lock(mutex_);
 
   // server category
-  configuration_.set<std::string>("server.host"   , "127.0.0.1");
-  configuration_.set<std::string>("server.port"   ,     "5123");
-  configuration_.set<int>        ("server.timeout",          60);
-  configuration_.set<unsigned>   ("server.retry"  ,           5);
+  configuration_.set<std::string>("server.host", "127.0.0.1");
+  configuration_.set<std::string>("server.port", "5123");
+  configuration_.set<int>("server.timeout", 60);
+  configuration_.set<unsigned>("server.retry", 5);
 
   // player category
-  configuration_.set<std::string>("player.name"   ,"DarkDev");
+  configuration_.set<std::string>("player.name", "DarkDev");
 
   // log category
-  configuration_.set<bool>("log.main"            ,  true);
-  configuration_.set<bool>("log.network"         , false);
-  configuration_.set<bool>("log.verbose"         , false);
-  configuration_.set<int> ("log.level"           ,     0);
+  configuration_.set<bool>("log.main", true);
+  configuration_.set<bool>("log.network", false);
+  configuration_.set<bool>("log.verbose", false);
+  configuration_.set<int>("log.level", 0);
 
   save();
 }

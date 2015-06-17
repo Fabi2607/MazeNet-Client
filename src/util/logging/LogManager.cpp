@@ -1,11 +1,3 @@
-/**
-* @file LogManager.cpp
-* @author Fabian Kantereit
-* @date 23.05.2014 21:25
-*
-* implementation for LogManager.hpp
-*/
-
 // header file
 #include "LogManager.hpp"
 
@@ -54,8 +46,9 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(time_average, "Average", double)
 
 std::ostream& operator<<(std::ostream& strm, SeverityLevel level) {
   constexpr static const char* strings[] = {
-      "info",
       "trace",
+      "debug",
+      "info",
       "notification",
       "warning",
       "error",
@@ -127,11 +120,11 @@ void LogManager::init() {
   // Setup standard file formatting
   fmt_ =
       expr::stream << std::setw(10) << std::setfill('.') << line_id << std::setfill(' ') << ": [" << severity
-          << "] " << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S")
-          << " (" << file << ":" << line << " --> " << func << ")" << std::endl << "\t"
-          << expr::if_(expr::has_attr(
+      << "] " << expr::format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S")
+      << " (" << file << ":" << line << " --> " << func << ")" << std::endl << "\t"
+      << expr::if_(expr::has_attr(
           tag_attr))[expr::stream << "<" << tag_attr << "> "]
-          << expr::smessage;
+      << expr::smessage;
 
   if (mazenet::util::cfg::CfgManager::instance().get<bool>("log.verbose", false)) {
     // initialize sinks
@@ -149,7 +142,8 @@ void LogManager::init() {
     sink->locked_backend()->auto_flush(true);
 
 
-    sink->set_filter((expr::has_attr(severity) && (severity >= mazenet::util::cfg::CfgManager::instance().get<int>("log.verbose_level", 0))));
+    sink->set_filter((expr::has_attr(severity) &&
+                      (severity >= mazenet::util::cfg::CfgManager::instance().get<int>("log.verbose_level", 0))));
     boost::log::core::get()->add_sink(sink);
   }
   boost::log::add_common_attributes();

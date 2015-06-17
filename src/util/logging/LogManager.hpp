@@ -1,10 +1,3 @@
-/**
-* @file LogManager.hpp
-* @author Fabian Kantereit
-* @date 23.05.2014 20:38
-*
-* contains the LogManager class
-*/
 #ifndef LOGMANAGER_HPP
 #define LOGMANAGER_HPP
 
@@ -29,8 +22,9 @@ namespace logging {
 * @brief log message severity levels for filtering
 */
 enum SeverityLevel {
-  info,          ///< general info messages
   trace,         ///< used by function_tracer
+  debug,
+  info,          ///< general info messages
   notification,  ///< notifications about normally working events
   warning,       ///< warnings about unexpected event
   error,         ///< errors that resulted in a partial crash
@@ -67,22 +61,6 @@ class LogManager : boost::noncopyable {
                     std::string const& file,
                     unsigned int line,
                     const char* func,
-                    SeverityLevel severity);
-
-  /**
-  * Writes command profiling information.
-  * @param name The name of the target log.
-  * @param message The message to write
-  * @param count The number of the command.
-  * @param time_elapsed The time it took to finish this command.
-  * @param time_average The average time it took to finish a command.
-  * @param severity Severity level of log message
-  */
-  void writeProfile(std::string const& name,
-                    std::string const& message,
-                    unsigned count,
-                    double time_elapsed,
-                    double time_average,
                     SeverityLevel severity);
 
   /**

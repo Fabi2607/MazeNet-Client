@@ -1,10 +1,3 @@
-/**
-* @file ProgramOptions.cpp
-* @author Fabian Kantereit
-* @date 10.11.2014 10:04
-*
-* contains the ProgramOptions class which manages commandline parameters
-*/
 #include "ProgramOptions.hpp"
 
 namespace mazenet {

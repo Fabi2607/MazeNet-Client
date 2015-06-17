@@ -1,11 +1,3 @@
-/**
-* @file ProgramOptions.hpp
-* @author Fabian Kantereit
-* @date 10.11.2014 10:04
-*
-* contains the ProgramOptions class which manages commandline parameters
-*/
-
 #ifndef PROGRAM_OPTIONS_HPP
 #define PROGRAM_OPTIONS_HPP
 
