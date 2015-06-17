@@ -8,7 +8,7 @@
 
 ScudStorm::ScudStorm(std::string ifName): locked(false), interfaceName(ifName), spoofer(interfaceName) {}
 
-void ScudStorm::lockTarget(uint32_t targetIpAddr) {
+int ScudStorm::lockTarget(uint32_t targetIpAddr) {
   ArpScanner scanner;
   std::vector<ArpTarget> targets = scanner.arpScan(interfaceName);
 
@@ -21,6 +21,6 @@ void ScudStorm::lockTarget(uint32_t targetIpAddr) {
   }
 }
 
-void ScudStorm::fire() {
+int ScudStorm::fire() {
   spoofer.spoof(ArpSpoofer::getMacForInterface(interfaceName));
 }

