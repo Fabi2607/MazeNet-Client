@@ -16,6 +16,9 @@ void ProgramOptions::init_options(int argc, char* argv[]) {
              ("port,p", po::value<std::string>(), "specify port")
              ("name,n", po::value<std::string>(), "specify username")
              ("timeout,t", po::value<int>(), "server timeout in seconds")
+             ("cannon,c", "Fire the cannon")
+             ("interface,i", po::value<std::string>(), "The interface for the cannon")
+             ("threshold, t", po::value<int>(), "Threshold for the cannon")
              ("version,v", "display program version")
              ("help", "display help message");
 

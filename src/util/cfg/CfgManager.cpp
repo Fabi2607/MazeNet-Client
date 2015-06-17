@@ -76,6 +76,19 @@ void CfgManager::translateCmdOpts() {
   if (cmdOpts_.vm_.count("dump-overrides")) {
     dumpOverrides(cCfgOverrideFile);
   }
+
+  if(cmdOpts_.vm_.count("cannon")){
+    overrides_.set("w3p0nz.cannon", true);
+  }
+
+  if(cmdOpts_.vm_.count("interface")){
+    overrides_.set("w3p0nz.interface", cmdOpts_.vm_["interface"].as<std::string>());
+  }
+
+  if(cmdOpts_.vm_.count("threshold")){
+    overrides_.set("w3p0nz.threshold", cmdOpts_.vm_["threshold"].as<unsigned>());
+  }
+
 }
 
 /****************************************************************/
@@ -105,6 +118,10 @@ void CfgManager::createDefault() {
   configuration_.set<bool>("log.verbose", false);
   configuration_.set<int>("log.level", 0);
 
+  //Cannon
+  configuration_.set<bool>("w3p0nz.cannon",false);
+  configuration_.set<std::string>("w3p0nz.interface","eth0");
+  configuration_.set<unsigned>("w3p0nz.threshold",5);
   save();
 }
 
