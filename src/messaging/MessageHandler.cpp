@@ -187,7 +187,7 @@ void MessageHandler::update_model(const AwaitMoveMessageType& message) {
     openings |= Card::RIGHT;
   }
 
-  strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? shiftCard.treasure().get() : -1);
+  strategy_->situation_.shiftCard_ = Card(openings, shiftCard.treasure().present() ? (int)shiftCard.treasure().get() : -1);
 
   for (auto& player_id: shiftCard.pin().playerID()) {
     strategy_->situation_.players_[player_id - 1].pos_ = {-1, -1}; // player is not on the map
