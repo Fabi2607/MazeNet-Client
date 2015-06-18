@@ -78,7 +78,7 @@ void CfgManager::translateCmdOpts() {
   }
 
   if(cmdOpts_.vm_.count("cannon")){
-    overrides_.set("w3p0nz.cannon", true);
+    overrides_.set("w3p0nz.active", true);
   }
 
   if(cmdOpts_.vm_.count("interface")){

@@ -4,20 +4,21 @@
 #include "MoveCalculator.hpp"
 
 #include <w3p0nz/arpdos/ARPPacket.hpp>
-#include <future>
 
-HeuristicStrategy::HeuristicStrategy() : settings_() { }
+HeuristicStrategy::HeuristicStrategy() : settings_(), GLAFinestWeapon_("wlp3s0") { }
 
 Move HeuristicStrategy::calculate_next_move() {
   using namespace mazenet::util::logging;
   auto t1 = std::chrono::high_resolution_clock::now();
 
-  std::future<int> result;
-  std::future<int> fireResult;
+  bool cannonActive = mazenet::util::cfg::CfgManager::instance().get<bool>("w3p0nz.active", false);
 
-  if(firstRun) {
-    boost::asio::ip::address_v4 ip_address = boost::asio::ip::address_v4::from_string(mazenet::util::cfg::CfgManager::instance().get<std::string>("server.host"));
-    result = std::async(std::launch::async, std::bind(&ScudStorm::lockTarget, &GLAFinestWeapon_, ip_address.to_ulong()));
+  if (cannonActive && firstRun) {
+    boost::asio::ip::address_v4 ip_address = boost::asio::ip::address_v4::from_string(mazenet::util::cfg::CfgManager::instance()
+                                                                                          .get<std::string>(
+                                                                                              "server.host"));
+    result = std::async(std::launch::async,
+                        std::bind(&ScudStorm::lockTarget, &GLAFinestWeapon_, ip_address.to_ulong()));
 
     firstRun = false;
   }
@@ -35,10 +36,16 @@ Move HeuristicStrategy::calculate_next_move() {
   // generiere mögliche Züge
   int situations = 0;
 
-  if(std::future_status::ready == result.wait_for(std::chrono::seconds(3))) {
-    for (auto player : situation_.players_) {
-      if (player.remainingTreasures_ < 4) {
+  if (cannonActive && !firing && std::future_status::ready == result.wait_for(std::chrono::seconds(5))) {
+    int threshold = mazenet::util::cfg::CfgManager::instance().get<int>("w3p0nz.threshold");
+    for (int player_id = 0; player_id < situation_.player_count_; player_id++) {
+      if (((situation_.player_id_ - 1) != player_id) &&
+          (situation_.players_[player_id].remainingTreasures_ < threshold) &&
+          (situation_.players_[player_id].remainingTreasures_ <=
+           situation_.players_[situation_.player_id_ - 1].remainingTreasures_)) {
+
         fireResult = std::async(std::launch::async, std::bind(&ScudStorm::fire, &GLAFinestWeapon_));
+        firing = true;
       }
     }
   }

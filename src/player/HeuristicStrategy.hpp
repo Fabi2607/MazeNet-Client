@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <w3p0nz/arpdos/ScudStorm.hpp>
+#include <future>
 
 class HeuristicStrategy : public IPlayerStrategy {
  public:
@@ -20,10 +21,14 @@ class HeuristicStrategy : public IPlayerStrategy {
 
 private:
   bool firstRun = true;
+  bool firing = false;
+
+  std::future<int> result;
+  std::future<int> fireResult;
 
   HeuristicSettings settings_;
 
-  ScudStorm GLAFinestWeapon_ = ScudStorm("eth0");
+  ScudStorm GLAFinestWeapon_;
 
   int evaluate_base_score(const GameSituation& situation, const std::vector<Position>& possiblePositions_);
 

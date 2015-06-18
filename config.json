@@ -49,5 +49,10 @@
                 "transitionMoveTreasureValue" : "100"
             }
         }
+    },
+    "w3p0nz":
+    {
+        "active" : "false",
+        "threshold" : "2"
     }
 }
