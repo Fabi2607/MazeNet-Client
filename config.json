@@ -30,6 +30,7 @@
         "position": {
             "onTargetValue": "10000000",
             "transitionMoveValue": "50000",
+            "transitionPossibleTreasureValue": "10",
             "distanceBaseValue": "100",
             "distanceFactor": "1",
             "moveOutOfMapPenalty": "1000000"
@@ -37,14 +38,14 @@
         "enemy": {
             "next" : {
                 "reachableTreasureValue" : "0",
-                "reachableHomeValue" : "200",
-                "reachableHomeCutoff" : "2",
+                "reachableHomeValue" : "100000",
+                "reachableHomeCutoff" : "1",
                 "transitionMoveTreasureValue" : "200"
             },
             "best" : {
                 "reachableTreasureValue" : "0",
-                "reachableHomeValue" : "100",
-                "reachableHomeCutoff" : "2",
+                "reachableHomeValue" : "100000",
+                "reachableHomeCutoff" : "1",
                 "transitionMoveTreasureValue" : "100"
             }
         }

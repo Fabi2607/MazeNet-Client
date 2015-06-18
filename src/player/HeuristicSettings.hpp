@@ -14,19 +14,20 @@ struct HeuristicSettings {
 
     onTreasureScore = cfgMan.get<int>("heuristic.position.onTargetValue");
     transitionMoveValue = cfgMan.get<int>("heuristic.position.transitionMoveValue");
+    transitionPossibleTreasureValue = cfgMan.get<int>("heuristic.position.transitionPossibleTreasureValue");
     distanceBaseValue = cfgMan.get<int>("heuristic.position.distanceBaseValue");
     distanceFactor = cfgMan.get<int>("heuristic.position.distanceFactor");
     moveOutOfMapPenalty = cfgMan.get<int>("heuristic.position.moveOutOfMapPenalty");
 
-    int nextReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.next.reachableTreasureValue");
-    int nextReachableHomeValue = cfgMan.get<int>("heuristic.enemy.next.reachableHomeValue");
-    int nextReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.next.reachableHomeCutoff");
-    int nextTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.next.transitionMoveTreasureValue");
+    nextReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.next.reachableTreasureValue");
+    nextReachableHomeValue = cfgMan.get<int>("heuristic.enemy.next.reachableHomeValue");
+    nextReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.next.reachableHomeCutoff");
+    nextTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.next.transitionMoveTreasureValue");
 
-    int bestReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.best.reachableTreasureValue");
-    int bestReachableHomeValue = cfgMan.get<int>("heuristic.enemy.best.reachableHomeValue");
-    int bestReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.best.reachableHomeCutoff");
-    int bestTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.best.transitionMoveTreasureValue");
+    bestReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.best.reachableTreasureValue");
+    bestReachableHomeValue = cfgMan.get<int>("heuristic.enemy.best.reachableHomeValue");
+    bestReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.best.reachableHomeCutoff");
+    bestTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.best.transitionMoveTreasureValue");
 
   }
 
@@ -37,6 +38,7 @@ struct HeuristicSettings {
 
   int onTreasureScore = 0;
   int transitionMoveValue = 0;
+  int transitionPossibleTreasureValue = 0;
   int distanceBaseValue = 0;
   int distanceFactor = 0;
   int moveOutOfMapPenalty = 0;
