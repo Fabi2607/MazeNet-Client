@@ -17,6 +17,17 @@ struct HeuristicSettings {
     distanceBaseValue = cfgMan.get<int>("heuristic.position.distanceBaseValue");
     distanceFactor = cfgMan.get<int>("heuristic.position.distanceFactor");
     moveOutOfMapPenalty = cfgMan.get<int>("heuristic.position.moveOutOfMapPenalty");
+
+    int nextReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.next.reachableTreasureValue");
+    int nextReachableHomeValue = cfgMan.get<int>("heuristic.enemy.next.reachableHomeValue");
+    int nextReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.next.reachableHomeCutoff");
+    int nextTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.next.transitionMoveTreasureValue");
+
+    int bestReachableTreasureValue = cfgMan.get<int>("heuristic.enemy.best.reachableTreasureValue");
+    int bestReachableHomeValue = cfgMan.get<int>("heuristic.enemy.best.reachableHomeValue");
+    int bestReachableHomeCutoff = cfgMan.get<int>("heuristic.enemy.best.reachableHomeCutoff");
+    int bestTransitionMoveTreasureValue = cfgMan.get<int>("heuristic.enemy.best.transitionMoveTreasureValue");
+
   }
 
   int reachableFieldValue = 0;
@@ -29,6 +40,16 @@ struct HeuristicSettings {
   int distanceBaseValue = 0;
   int distanceFactor = 0;
   int moveOutOfMapPenalty = 0;
+
+  int nextReachableTreasureValue = 0;
+  int nextReachableHomeValue = 0;
+  int nextReachableHomeCutoff = 0;
+  int nextTransitionMoveTreasureValue = 0;
+
+  int bestReachableTreasureValue = 0;
+  int bestReachableHomeValue = 0;
+  int bestReachableHomeCutoff = 0;
+  int bestTransitionMoveTreasureValue = 0;
 };
 
 

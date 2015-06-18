@@ -1,7 +1,7 @@
 {
     "server":
     {
-        "host": "127.0.0.1",
+        "host": "cebu.dark-dev.com",
         "port": "5123",
         "timeout": "60",
         "retry": "5"
@@ -15,7 +15,7 @@
         "main": "true",
         "network": "true",
         "heuristic": "true",
-        "verbose": "false",
+        "verbose": "true",
         "verbose_level": "3",
         "level": "0"
     },
@@ -28,15 +28,25 @@
             "reachableHomeCutoff": "3"
         },
         "position": {
-            "onTargetValue": "100000",
-            "transitionMoveValue": "1000",
+            "onTargetValue": "10000000",
+            "transitionMoveValue": "50000",
             "distanceBaseValue": "100",
             "distanceFactor": "1",
             "moveOutOfMapPenalty": "1000000"
         },
         "enemy": {
-            "leadingReachableTreasureValue": "5",
-            "allReachableTreasureValue": "1"
+            "next" : {
+                "reachableTreasureValue" : "0",
+                "reachableHomeValue" : "200",
+                "reachableHomeCutoff" : "2",
+                "transitionMoveTreasureValue" : "200"
+            },
+            "best" : {
+                "reachableTreasureValue" : "0",
+                "reachableHomeValue" : "100",
+                "reachableHomeCutoff" : "2",
+                "transitionMoveTreasureValue" : "100"
+            }
         }
     }
 }

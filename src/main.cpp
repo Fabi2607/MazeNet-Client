@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
         handler.handle_incoming_message(msg);
       });
 
-    dispatcher.sendLoginMessage("DarkDev");
+    dispatcher.sendLoginMessage(cfgMan.get<std::string>("player.name"));
 
     client.getIOService().run();
   }

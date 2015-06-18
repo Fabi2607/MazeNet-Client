@@ -28,6 +28,8 @@ private:
   int evaluate_base_score(const GameSituation& situation, const std::vector<Position>& possiblePositions_);
 
   int evaluate_position_score(const GameSituation& situation, const Position& position);
+
+  int evaluate_enemy_score(const GameSituation& situation);
 };
 
 
