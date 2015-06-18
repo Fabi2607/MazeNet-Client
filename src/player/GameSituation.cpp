@@ -28,7 +28,7 @@ void GameSituation::perform_shift(Move m) {
   // Spieler verlässt Spielfeld
   for (int i = 1; i <= 4; ++i) {
     if (shiftCard_.hasPlayer(i)) {
-      players_[i - 1].pos_ = {m.shift_pos.col, m.shift_pos.row};
+      players_[i - 1].pos_ = {m.shift_pos.row, m.shift_pos.col};
     }
   }
 }
