@@ -25,8 +25,8 @@ bool ArpSpoofer::addConnection(const ArpConnection& connection) {
 
 void ArpSpoofer::spoof(uint64_t spoofAddr) {
   spoofing = true;
-  for(auto itr = connections.begin(); itr != connections.end(); ++itr) {
-    (*itr).spoof(spoofAddr);
+  for(auto& con: connections) {
+    con.spoof(spoofAddr);
   }
 
   pcap_t* handle = pcap_open_live(interfaceName.c_str(), 1500, 0, 2000, NULL);
@@ -40,13 +40,13 @@ void ArpSpoofer::spoof(uint64_t spoofAddr) {
     packet = pcap_next(handle, &header);
     struct etherhdr* eth_header = (struct etherhdr*) packet;
 
-    if(ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
+    if(eth_header && ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
       ARPPacket arpPacket(packet);
       //if packet is arp request...
       if(arpPacket.getOperation() == ARPPacket::Operation::request) {
-	for(auto itr = connections.begin(); itr != connections.end(); ++itr) {
-	  (*itr).spoofBack(packet, spoofAddr);
-	}
+	      for(auto& con: connections) {
+	        con.spoofBack(packet, spoofAddr);
+	      }
       }
     }
   }
