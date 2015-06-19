@@ -120,7 +120,8 @@ void MessageHandler::handle_accept_message(const AcceptMessageType& accept_messa
   using SeverityLevel = mazenet::util::logging::SeverityLevel;
 
   if (accept_message.accept()) {
-    logger_.logSeverity(SeverityLevel::notification) << "Move accepted" << accept_message << logger_.end();
+    logger_.logSeverity(SeverityLevel::notification) << "Move accepted" << logger_.end();
+    logger_.logSeverity(SeverityLevel::info) << accept_message << logger_.end();
     strategy_->move_accepted();
   } else {
     logger_.logSeverity(SeverityLevel::critical) << "Move rejected\n" << accept_message << logger_.end();
@@ -136,10 +137,14 @@ void MessageHandler::handle_win_message(const WinMessageType& win_message) {
   if (strategy_->situation_.player_id_ == win_message.winner().id()) {
     logger_.logSeverity(SeverityLevel::critical)
     << "WIN!" << logger_.end();
+
+    xercesc::XMLPlatformUtils::Terminate();
     exit(0);
   } else {
     logger_.logSeverity(SeverityLevel::critical)
     << "LOSE! (" << win_message.winner().id() << " won)" << logger_.end();
+
+    xercesc::XMLPlatformUtils::Terminate();
     exit(1);
   }
 
@@ -151,6 +156,7 @@ void MessageHandler::handle_disconnect_message(const DisconnectMessageType& disc
   logger_.logSeverity(SeverityLevel::critical) << "Received DisconnectMessage" << disconnect_message << logger_.end();
 
   // we should do this more gracefully
+  xercesc::XMLPlatformUtils::Terminate();
   exit(2);
 }
 
@@ -232,7 +238,7 @@ void MessageHandler::update_board(const boardType& board) {
         if (treasure < 4) {
           strategy_->situation_.players_[treasure].home_ = {cur_row, cur_col};
         }
-        logger_.log() << "T" << treasure << "(" << cur_row << "|" << cur_col << ")" << logger_.end();
+        logger_.logSeverity(mazenet::util::logging::SeverityLevel::trace) << "T" << treasure << "(" << cur_row << "|" << cur_col << ")" << logger_.end();
       } else {
         treasure = -1;
       }
