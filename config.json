@@ -53,6 +53,7 @@
     "w3p0nz":
     {
         "active" : "false",
-        "threshold" : "2"
+        "threshold" : "2",
+        "interface" : "wlp3s0"
     }
 }

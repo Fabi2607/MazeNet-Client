@@ -5,7 +5,8 @@
 
 #include <w3p0nz/arpdos/ARPPacket.hpp>
 
-HeuristicStrategy::HeuristicStrategy() : settings_(), GLAFinestWeapon_("wlp3s0") { }
+HeuristicStrategy::HeuristicStrategy() : settings_(),
+                                         GLAFinestWeapon_(mazenet::util::cfg::CfgManager::instance().get<std::string>("w3p0nz.interface")) { }
 
 Move HeuristicStrategy::calculate_next_move() {
   using namespace mazenet::util::logging;
