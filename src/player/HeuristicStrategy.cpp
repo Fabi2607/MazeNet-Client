@@ -67,7 +67,7 @@ Move HeuristicStrategy::calculate_next_move() {
 #endif
       int base_score = evaluate_base_score(cur_situation, positions);
 
-      base_score -= evaluate_enemy_score(cur_situation);
+      base_score -= evaluate_enemy_score(cur_situation, situations);
 
       Move current_move = available_basic_moves[i];
       for (auto pos: positions) {
@@ -75,7 +75,7 @@ Move HeuristicStrategy::calculate_next_move() {
         current_move.new_pos = pos;
 
         int actual_score = base_score;
-        actual_score += evaluate_position_score(cur_situation, pos);
+        actual_score += evaluate_position_score(cur_situation, pos, situations);
 #if 0
         logger.log() << "\nR: " << pos.row << " C: " << pos.col
         << " Score: " << actual_score << logger.end();
@@ -100,7 +100,7 @@ Move HeuristicStrategy::calculate_next_move() {
   auto t2 = std::chrono::high_resolution_clock::now();
 
   logger.logSeverity(SeverityLevel::notification) << "Calculated situations: " << situations
-  << "\nTime: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() << logger.end();
+  << "\nTime: " << std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() << "ms" << logger.end();
 
   logger.logSeverity(SeverityLevel::notification) << "Best Move: (" << best_score << ")"
   << "\nCard: " << best_move.shift_card << " R: " << best_move.shift_pos.row << " C: " << best_move.shift_pos.col
@@ -143,7 +143,7 @@ int HeuristicStrategy::evaluate_base_score(const GameSituation& situation,
   return score;
 }
 
-int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, const Position& position) {
+int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, const Position& position, int& situations) {
   int score = 0;
 
   auto& cur_card = situation.board_.cards_[position.row][position.col];
@@ -168,6 +168,7 @@ int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, c
         };
       }
     }
+  }
 
     // one additional move transition not accounting for other players
     auto moves = MoveCalculator::get_possible_moves(situation);
@@ -199,14 +200,15 @@ int HeuristicStrategy::evaluate_position_score(const GameSituation& situation, c
             }
           }
         }
+        situations++;
       }
-    }
+
   }
 
   return score;
 }
 
-int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
+int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation, int& situations) {
   int score = 0;
 
   // best player score
@@ -226,6 +228,7 @@ int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
     new_sit.player_id_ = best_id;
     auto positions = MoveCalculator::get_possible_positions(new_sit);
     for (auto pos : positions) {
+      situations++;
       if (new_sit.board_.cards_[pos.row][pos.col].getTreasure() > 3 &&
           new_sit.found_treasures_.find(new_sit.board_.cards_[pos.row][pos.col].getTreasure()) ==
           new_sit.found_treasures_.end()) {
@@ -243,6 +246,7 @@ int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
       auto trans_positions = MoveCalculator::get_possible_positions(transitionSit);
 
       for (auto pos : trans_positions) {
+        situations++;
         if (new_sit.board_.cards_[pos.row][pos.col].getTreasure() > 3 &&
             new_sit.found_treasures_.find(new_sit.board_.cards_[pos.row][pos.col].getTreasure()) ==
             new_sit.found_treasures_.end()) {
@@ -271,6 +275,7 @@ int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
     new_sit.player_id_ = next_id;
     auto positions = MoveCalculator::get_possible_positions(new_sit);
     for (auto pos : positions) {
+      situations++;
       if (new_sit.board_.cards_[pos.row][pos.col].getTreasure() > 3 &&
           new_sit.found_treasures_.find(new_sit.board_.cards_[pos.row][pos.col].getTreasure()) ==
           new_sit.found_treasures_.end()) {
@@ -287,6 +292,7 @@ int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
       auto trans_positions = MoveCalculator::get_possible_positions(transitionSit);
 
       for (auto pos : trans_positions) {
+        situations++;
         if (new_sit.board_.cards_[pos.row][pos.col].getTreasure() > 3 &&
             new_sit.found_treasures_.find(new_sit.board_.cards_[pos.row][pos.col].getTreasure()) ==
             new_sit.found_treasures_.end()) {
