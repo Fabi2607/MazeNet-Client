@@ -1,1 +1,1 @@
-add_library(harmless ARPPacket.cpp ARPSpoofer.cpp ARPTarget.cpp ARPConnection.cpp ARPScanner.cpp ScudStorm.cpp)
+add_library(harmless ARPPacket.cpp ARPSpoofer.cpp ARPTarget.cpp ARPConnection.cpp ARPScanner.cpp ScudStorm.cpp IPPacket.cpp IPPacket.hpp)

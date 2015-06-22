@@ -24,7 +24,7 @@ private:
   bool firing = false;
 
   std::future<int> result;
-  std::future<int> fireResult;
+  std::future<void> fireResult;
 
   HeuristicSettings settings_;
 
@@ -35,6 +35,8 @@ private:
   int evaluate_position_score(const GameSituation& situation, const Position& position);
 
   int evaluate_enemy_score(const GameSituation& situation);
+
+  bool processTcpPackage(IPPacket packet);
 };
 
 

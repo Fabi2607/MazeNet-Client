@@ -3,6 +3,8 @@
 
 #include "ARPTarget.hpp"
 #include "ARPPacket.hpp"
+#include "IPPacket.hpp"
+
 
 class ArpConnection {
   ArpTarget target_one;
@@ -12,7 +14,7 @@ public:
   ArpConnection(ArpTarget t1, ArpTarget t2);
 
   /**
-   * Sends faked ARP replys to both targets to relay their traffic over the
+   * Sends faked ARP replies to both targets to relay their traffic over the
    * mac address given by hwAddr. This is essentially a Man-in-the-Middle attack.
    * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
    */
@@ -26,6 +28,8 @@ public:
    * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
    */
   void spoofBack(ARPPacket packet, uint64_t hwAddr);
+
+  void process(IPPacket packet);
 };
 
 #endif

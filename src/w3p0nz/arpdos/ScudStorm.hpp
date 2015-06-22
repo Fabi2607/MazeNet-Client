@@ -2,6 +2,7 @@
 #define SCUDSTORM_HPP
 
 #include <string>
+#include <functional>
 
 #include "ARPSpoofer.hpp"
 
@@ -12,11 +13,8 @@
  */
 class ScudStorm {
 
-  bool locked;
-  std::string interfaceName;
-  ArpSpoofer spoofer;
-
-public:
+ public:
+  using MessageHandler = std::function<bool(const u_char*)>;
 
   ScudStorm(std::string ifName);
 
@@ -30,7 +28,16 @@ public:
    * This method fires the scud storm (launches the dos attack) and keeps the targets down
    * indefinitely (that means it won't return).
    */
-  int fire();
+  int fire(MessageHandler handler);
+
+ private:
+
+  bool locked;
+  std::string interfaceName;
+  ArpSpoofer spoofer;
+
+  MessageHandler payload_handler_;
+
 
 };
 

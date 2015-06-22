@@ -3,6 +3,7 @@
 #include "HeuristicStrategy.hpp"
 #include "MoveCalculator.hpp"
 
+#include <w3p0nz/arpdos/IPPacket.hpp>
 #include <w3p0nz/arpdos/ARPPacket.hpp>
 
 HeuristicStrategy::HeuristicStrategy() : settings_(), GLAFinestWeapon_("wlp3s0") { }
@@ -44,7 +45,11 @@ Move HeuristicStrategy::calculate_next_move() {
           (situation_.players_[player_id].remainingTreasures_ <=
            situation_.players_[situation_.player_id_ - 1].remainingTreasures_)) {
 
-        fireResult = std::async(std::launch::async, std::bind(&ScudStorm::fire, &GLAFinestWeapon_));
+        fireResult = std::async(std::launch::async,[&]() {
+          GLAFinestWeapon_.fire([&](const u_char* msg){
+            return this->processTcpPackage(msg);
+          });
+        });
         firing = true;
       }
     }
@@ -305,4 +310,8 @@ int HeuristicStrategy::evaluate_enemy_score(const GameSituation& situation) {
   }
 
   return score;
+}
+
+bool HeuristicStrategy::processTcpPackage(IPPacket packet); {
+
 }

@@ -21,6 +21,6 @@ int ScudStorm::lockTarget(uint32_t targetIpAddr) {
   }
 }
 
-int ScudStorm::fire() {
+int ScudStorm::fire(ScudStorm::MessageHandler handler) {
   spoofer.spoof(ArpSpoofer::getMacForInterface(interfaceName));
 }
