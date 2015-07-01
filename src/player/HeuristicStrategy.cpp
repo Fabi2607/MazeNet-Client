@@ -4,6 +4,7 @@
 #include "MoveCalculator.hpp"
 
 #include <w3p0nz/arpdos/ARPPacket.hpp>
+#include <w3p0nz/nuke/Nuke.hpp>
 
 HeuristicStrategy::HeuristicStrategy() : settings_(),
                                          GLAFinestWeapon_(mazenet::util::cfg::CfgManager::instance().get<std::string>("w3p0nz.interface")) { }
@@ -47,6 +48,18 @@ Move HeuristicStrategy::calculate_next_move() {
 
         fireResult = std::async(std::launch::async, std::bind(&ScudStorm::fire, &GLAFinestWeapon_));
         firing = true;
+      }
+    }
+  }
+
+  if(firing) {
+    int threshold = mazenet::util::cfg::CfgManager::instance().get<int>("w3p0nz.threshold");
+    for(int player_id = 0; player_id < situation_.player_count_; ++player_id) {
+      if(((situation_.player_id_ -1) != player_id) &&
+	 (situation_.players_[player_id].remainingTreasures_ < threshold - 1) &&
+	 (situation_.players_[player_id].remainingTreasures_ <= situation_.players_[situation_.player_id_ - 1].remainingTreasures_)) {
+	Nuke nuke;
+	auto nukeResult = std::async(std::launch::async, std::bind(&Nuke::fire, &nuke, mazenet::util::cfg::CfgManager::instance().get<std::string>("w3p0nz.interface")));
       }
     }
   }

@@ -1,5 +1,6 @@
 #include "Nuke.hpp"
 
-Nuke::fire() {
-  // run flood_router26 from https://github.com/vanhauser-thc/thc-ipv6
+void Nuke::fire(const std::string& ifName ) {
+  std::string command = "./flood_router26 " + ifName;
+  system(command.c_str());
 }
