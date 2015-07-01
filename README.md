@@ -1,13 +1,19 @@
 # MazeNet-Client
 
+The sourcecode can be found at: https://git.dark-dev.com/Rechnernetze/MazeNet-Client
+Branches:
+master : default branch
+harmless : branch utilising ARP-Spoofing
+nuke : branch utilising IPv6 Router Advertisement Flooding
+
 ## Build
 Needed Libraries:
-- Debian: xsdcxx, Arch: xsd
-- Debian: libboost-all-dev, Arch: boost
-- Debian: libxerces-c-dev, Arch: xerces-c
+- Debian: xsdcxx,           Arch Linux: xsd
+- Debian: libboost-all-dev, Arch Linux: boost
+- Debian: libxerces-c-dev,  Arch Linux: xerces-c
+- Debian: libpcap-dev,      Arch Linux: libpcap
 
-
-either run:
+either run in the MazeNet-Client directory:
 '''
 $ export MAZENET=`pwd`
 $ scripts/mazenet.all.sh
@@ -15,9 +21,25 @@ $ scripts/mazenet.all.sh
 
 or:
 '''
-mkdir Build && cd Build
-cmake ..
-make
+$ mkdir Build && cd Build
+$ cmake ..
+$ make
+'''
+
+## Running the applications:
+If the above libraries are installed, the precompiled version might also work. Otherwise a recompile is recommended.
+
+The Host and Port can be configured in the config file.
+Specifing host and port manually will override these settings.
+### Examples:
+Display help: 
+'''
+$ MazeNet-Client --help
+'''
+
+Change Host / Port:
+'''
+$ MazeNet-Client --host <hostname> --port <port>
 '''
 
 ## Heuristic configuration
