@@ -28,6 +28,7 @@ $ make
 
 ## Running the applications:
 If the above libraries are installed, the precompiled version might also work. Otherwise a recompile is recommended.
+If the w3p0nz.active config option is set to true, you need root permissions!
 
 The Host and Port can be configured in the config file.
 Specifing host and port manually will override these settings.
