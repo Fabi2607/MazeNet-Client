@@ -17,7 +17,7 @@
         "heuristic": "true",
         "verbose": "true",
         "verbose_level": "3",
-        "level": "0"
+        "level": "3"
     },
     "heuristic":
     {
