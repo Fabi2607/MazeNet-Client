@@ -14,17 +14,17 @@ Needed Libraries:
 - Debian: libpcap-dev,      Arch Linux: libpcap
 
 either run in the MazeNet-Client directory:
-'''
+```
 $ export MAZENET=`pwd`
 $ scripts/mazenet.all.sh
-'''
+```
 
 or:
-'''
+```
 $ mkdir Build && cd Build
 $ cmake ..
 $ make
-'''
+```
 
 ## Running the applications:
 If the above libraries are installed, the precompiled version might also work. Otherwise a recompile is recommended.
@@ -34,14 +34,14 @@ The Host and Port can be configured in the config file.
 Specifing host and port manually will override these settings.
 ### Examples:
 Display help: 
-'''
+```
 $ MazeNet-Client --help
-'''
+```
 
 Change Host / Port:
-'''
+```
 $ MazeNet-Client --host <hostname> --port <port>
-'''
+```
 
 ## Heuristic configuration
 
