@@ -1,9 +1,11 @@
 # MazeNet-Client
 
-The sourcecode can be found at: https://git.dark-dev.com/Rechnernetze/MazeNet-Client
 Branches:
+
 master : default branch
+
 harmless : branch utilising ARP-Spoofing
+
 nuke : branch utilising IPv6 Router Advertisement Flooding
 
 ## Build
@@ -86,4 +88,3 @@ These values affect the best player
 - reachablehomeCutoff : above value will be used as soon as the remaining treasures are below or equal to the cutoff
 
 - transitionMoveTreasureValue : value of a treasure the enemy can reach with a shift operation. divided by number of remaining treasures to increase late game aggressive behaviour.
-
