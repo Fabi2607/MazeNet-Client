@@ -9,14 +9,14 @@ class ArpConnection {
   ArpTarget target_two;
 
 public:
-  ArpConnection(ArpTarget t1, ArpTarget t2);
+  ArpConnection(const ArpTarget& t1, const ArpTarget& t2);
 
   /**
    * Sends faked ARP replys to both targets to relay their traffic over the
    * mac address given by hwAddr. This is essentially a Man-in-the-Middle attack.
    * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
    */
-  void spoof(uint64_t hwAddr);
+  void spoof(uint64_t hwAddr) const;
 
   /**
    * Sends a new faked ARP reply if the given packet is an ARP request for one of
@@ -25,7 +25,7 @@ public:
    * the connections targets.
    * @hwAddr the mac address of the interface of the 'Man-in-the-Middle'.
    */
-  void spoofBack(ARPPacket packet, uint64_t hwAddr);
+  void spoofBack(const ARPPacket& packet, uint64_t hwAddr) const;
 };
 
 #endif

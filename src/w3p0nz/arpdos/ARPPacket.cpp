@@ -33,7 +33,7 @@ ARPPacket::ARPPacket(const u_char* packet): ethTargetAddr(),
 /**
  * Converts a MAC Address, stored in a 6 Byte unsigned char array, into a uint64_t.
  */
-uint64_t ARPPacket::hwFromArray(unsigned char* arr) {
+uint64_t ARPPacket::hwFromArray(const unsigned char* arr) {
   uint64_t value = 0;
   for(int i = 0; i < 6; ++i) {
     uint64_t tmp = arr[i];
@@ -43,7 +43,7 @@ uint64_t ARPPacket::hwFromArray(unsigned char* arr) {
   return value;
 }
 
-uint32_t ARPPacket::ipFromArray(unsigned char* arr) {
+uint32_t ARPPacket::ipFromArray(const unsigned char* arr) {
   uint32_t value = 0;
   for(int i = 0; i < 4; ++i) {
     uint32_t tmp = arr[i];
@@ -59,7 +59,7 @@ void ARPPacket::setEthTarget(uint64_t ethTarget) {
   std::reverse(&ethTargetAddr[0], &ethTargetAddr[6]);
 }
 
-uint64_t ARPPacket::getEthTarget() {
+uint64_t ARPPacket::getEthTarget() const {
   return hwFromArray(ethTargetAddr);
 }
 
@@ -69,7 +69,7 @@ void ARPPacket::setSourceHWAddr(uint64_t srcHWAddr) {
   std::reverse(&sourceHWAddr[0], &sourceHWAddr[6]);
 }
 
-uint64_t ARPPacket::getSourceHWAddr() {
+uint64_t ARPPacket::getSourceHWAddr() const {
   return hwFromArray(sourceHWAddr);
 }
 
@@ -79,7 +79,7 @@ void ARPPacket::setTargetHWAddr(uint64_t tgtHWAddr) {
   std::reverse(&targetHWAddr[0], &targetHWAddr[6]);
 }
 
-uint64_t ARPPacket::getTargetHWAddr() {
+uint64_t ARPPacket::getTargetHWAddr() const {
   return hwFromArray(targetHWAddr);
 }
 
@@ -87,7 +87,7 @@ void ARPPacket::setSourceIPAddr(uint32_t srcIPAddr) {
   sourceIPAddr = htonl(srcIPAddr);
 }
 
-uint32_t ARPPacket::getSourceIPAddr() {
+uint32_t ARPPacket::getSourceIPAddr() const {
   return sourceIPAddr;
 }
 
@@ -95,7 +95,7 @@ void ARPPacket::setTargetIPAddr(uint32_t tgtIPAddr) {
   targetIPAddr = htonl(tgtIPAddr);
 }
 
-uint32_t ARPPacket::getTargetIPAddr() {
+uint32_t ARPPacket::getTargetIPAddr() const {
   return targetIPAddr;
 }
 
@@ -103,11 +103,11 @@ void ARPPacket::setOperation(Operation op) {
   operation = op;
 }
 
-ARPPacket::Operation ARPPacket::getOperation() {
+ARPPacket::Operation ARPPacket::getOperation() const {
   return operation;
 }
 
-bool ARPPacket::sendPacket(std::string ifName) {
+bool ARPPacket::sendPacket(const std::string& ifName) {
 
   //Construct ethernet header
   struct ether_header header;

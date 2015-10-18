@@ -14,7 +14,7 @@ public:
   //timeout when trying to detremine the mac address in milliseconds.
   static const int TIMEOUT = 100;
 
-  ArpTarget(std::string ifName, uint32_t pTargetIPAddr);
+  ArpTarget(const std::string& ifName, uint32_t pTargetIPAddr);
 
   uint32_t getIPAddr() const;
   uint64_t getMacAddr() const;
@@ -25,7 +25,7 @@ public:
    * @hwAddr source Mac address of the fake reply.
    * @ipAddr source IP address of the fake reply.
    */
-  void spoof(uint64_t hwAddr, uint32_t ipAddr);
+  void spoof(uint64_t hwAddr, uint32_t ipAddr) const;
 
 private:
   void detMacAddr();

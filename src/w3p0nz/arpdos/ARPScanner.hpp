@@ -9,7 +9,7 @@
 class ArpScanner {
 
 public:
-  static std::vector<ArpTarget> arpScan(std::string ifName);
+  static std::vector<ArpTarget> arpScan(const std::string& ifName);
 
 };
 

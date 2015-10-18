@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-ArpSpoofer::ArpSpoofer(std::string pInterfaceName): connections(), interfaceName(pInterfaceName),
+ArpSpoofer::ArpSpoofer(const std::string& pInterfaceName): connections(), interfaceName(pInterfaceName),
 						    macAddr(getMacForInterface(interfaceName)),
 						    ipAddr(getIpForInterface(interfaceName)),
 						    spoofing(false) {}
@@ -56,7 +56,7 @@ void ArpSpoofer::setSpoofing(bool pSpoofing) {
   spoofing = pSpoofing;
 }
 
-uint64_t ArpSpoofer::getMacForInterface(std::string ifName) {
+uint64_t ArpSpoofer::getMacForInterface(const std::string& ifName) {
   int rsocket;
   struct ifreq buffer;
   rsocket = socket(PF_INET, SOCK_DGRAM, 0);
@@ -75,7 +75,7 @@ uint64_t ArpSpoofer::getMacForInterface(std::string ifName) {
   return value;
 }
 
-uint32_t ArpSpoofer::getIpForInterface(std::string ifName) {
+uint32_t ArpSpoofer::getIpForInterface(const std::string& ifName) {
   int rsocket;
   struct ifreq buffer;
 

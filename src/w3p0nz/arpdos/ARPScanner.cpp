@@ -1,7 +1,7 @@
 #include "ARPScanner.hpp"
 #include "ARPSpoofer.hpp"
 
-std::vector<ArpTarget> ArpScanner::arpScan(std::string ifName) {
+std::vector<ArpTarget> ArpScanner::arpScan(const std::string& ifName) {
 
   std::vector<ArpTarget> ret;
 

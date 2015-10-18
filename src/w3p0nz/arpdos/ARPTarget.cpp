@@ -5,7 +5,7 @@
 
 #include <chrono>
 
-ArpTarget::ArpTarget(std::string ifName, uint32_t pTargetIPAddr):
+ArpTarget::ArpTarget(const std::string& ifName, uint32_t pTargetIPAddr):
     interfaceName(ifName),
     handle(pcap_open_live (interfaceName.c_str(), 1500, 0, TIMEOUT/10, NULL)),
     targetIPAddr(pTargetIPAddr),
@@ -78,7 +78,7 @@ void ArpTarget::waitForARPRepley() {
   }
 }
 
-void ArpTarget::spoof(uint64_t hwAddr, uint32_t ipAddr) {
+void ArpTarget::spoof(uint64_t hwAddr, uint32_t ipAddr) const {
   ARPPacket arpReply;
   arpReply.setEthTarget(targetMACAddr);
 

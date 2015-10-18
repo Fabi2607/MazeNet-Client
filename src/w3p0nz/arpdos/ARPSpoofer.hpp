@@ -16,15 +16,15 @@ class ArpSpoofer {
   bool spoofing;
 
 public:
-  ArpSpoofer(std::string pInterfaceName);
+  ArpSpoofer(const std::string& pInterfaceName);
 
   bool addConnection(const ArpConnection& connection);
 
   void spoof(uint64_t spoofAddr);
   void setSpoofing(bool pSpoofing);
 
-  static uint32_t getIpForInterface(std::string ifName);
-  static uint64_t getMacForInterface(std::string ifName);
+  static uint32_t getIpForInterface(const std::string& ifName);
+  static uint64_t getMacForInterface(const std::string& ifName);
 
 };
 
